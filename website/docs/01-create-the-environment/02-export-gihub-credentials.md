@@ -1,7 +1,7 @@
 ---
 id: export-github
 sidebar_label: 'Fork GitHub repository'
-sidebar_position: 2
+sidebar_position: 5
 ---
 
 # Export your GitHub's personal access token and username:

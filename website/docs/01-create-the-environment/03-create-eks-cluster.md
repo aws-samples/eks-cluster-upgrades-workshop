@@ -1,7 +1,7 @@
 ---
 id: create-cluster
 sidebar_label: 'Create your EKS cluster'
-sidebar_position: 3
+sidebar_position: 6
 ---
 
 # Create your EKS Cluster

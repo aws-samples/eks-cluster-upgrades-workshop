@@ -76,9 +76,9 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'create-the-environment/deploy-cloudformation',
+            docId: 'create-the-environment/select-your-environment',
             position: 'left',
-            label: 'Introduction',
+            label: 'Setup',
           },
           {
             type: 'doc',
