@@ -11,8 +11,8 @@ The Amazon cluster upgrades workshop is built to provide you with a reference ar
 ### Why this architecture?
 
 One of the key benefits of using GitOps is that it enables us to use a mono repository approach for deploying both add-ons and applications. This approach makes the upgrade process much smoother because we have a single location to look at for deprecated API versions and ensure that add-ons are backwards compatible.
-
-![EKS Architecture](docs/static/eks-upgrades-architecture.png)
+<!-- 
+![EKS Architecture](docs/static/eks-upgrades-architecture.png) -->
 
 By the end of this workshop, you will have a solid understanding of how to use GitOps with Fluxv2 and Karpenter to simplify the EKS Cluster upgrade process. We hope that this will help you to streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
 
