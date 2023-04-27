@@ -1,0 +1,38 @@
+# TBD: Here will be the sample application, deployed in Karpenter Node, needs to apply taint and tolerations
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "256m"
+          limits:
+            memory: "128Mi"
+            cpu: "256m"
+      nodeSelector: # Force scale on Karpenter nodes
+        node-type: applications
+      tolerations: # Force scale on Karpenter nodes
+      - key: "applications"
+        operator: "Exists"
+        effect: "NoSchedule"
+status: {}
