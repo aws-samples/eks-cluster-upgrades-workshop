@@ -1,0 +1,8 @@
+{
+  "label": "Karpenter Scaling",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "In this module you will understand how Karpenter can benefit customers during cluster upgrades"
+  }
+}
