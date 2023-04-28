@@ -11,15 +11,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js 20.x
-      uses: actions/setup-node@v2
+      uses: aactions/setup-node@v3
       with:
         node-version: 20.x
         cache: 'npm'
-        cache-dependency-path: package-lock.json
+        cache-dependency-path: website/package-lock.json
     - name: Install dependencies
-      run: npm install 
+      run: npm install
+      working-directory: website
     - name: Build file
       run: npm run build
+      working-directory: website
       
       
     - name: Deploy production to Netlify
@@ -28,5 +30,5 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-        build-dir: './build'
+        build-dir: './website/build'
         comment-on-commit: true
