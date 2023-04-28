@@ -18,7 +18,9 @@ And then create your cluster:
 eksctl create cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
-> This can take few minutes
+:::note
+This can take few minutes, might be a goot time for a break!
+:::
 
 ## Export your Cluster Endpoint.
 

@@ -8,7 +8,7 @@ sidebar_position: 2
 
 In this topic, we will explore the Flux configurations within the GitHub repository. We will examine the contents and purpose of each file in the Applications and Add-ons folders, offering a clear understanding of the repository's structure and how it contributes to managing Kubernetes deployments through GitOps principles.
 
-**Objective**: Gain a deeper understanding of the Flux configurations in the provided GitHub repository, specifically the Applications and Add-ons folders, to improve your ability to manage containerized applications using Flux in Kubernetes clusters.
+So in this module you will gain a deeper understanding of the Flux configurations in the provided GitHub repository, specifically the Applications and Add-ons folders, to improve your ability to manage containerized applications using Flux in Kubernetes clusters.
 
 ## Kustomize
 Kustomize is a Kubernetes-native configuration management tool that allows you to customize Kubernetes manifests declaratively without templating. It helps manage and deploy complex applications by generating customized resource configurations from reusable base manifests and environment-specific patches.
@@ -17,11 +17,13 @@ In the context of Flux, a Kustomization object is a custom resource defined by t
 
 This enables a more organized and automated approach to managing Kubernetes manifests, improving overall efficiency and reducing the risk of human error.
 
-# Flux folder structure
+## Flux folder structure
 
 ![Create fork](../../static/img/flux-flow-diagram.png)
 
-> Below we have the explanation around how this folder structure works and what it is used for.
+:::info
+Below we have a detailed explanation around how this folder structure works and what it is used for.
+:::
 
 ## Clusters Folder
 The folder contains Flux configuration files for a Kubernetes cluster named "cluster-demo". Each cluster has its own folder within the Clusters directory. Key files include infra.yaml for configuring Flux deployment, dependencies.yaml for defining Kustomization resources and dependencies, apps.yaml for managing Kubernetes manifest deployments, and sources.yaml for defining Kustomization resources related to sources. These files work together to manage and deploy Kubernetes resources within the connected Git repository.
@@ -82,13 +84,9 @@ These two files are necessary components of the Karpenter add-on in Kubernetes. 
 
 2. `01-default-karpenter-provisioner.yaml` - This YAML manifest file defines a Provisioner and an AWSNodeTemplate in Kubernetes. The Provisioner specifies constraints on provisioned nodes and enables consolidation, while the AWSNodeTemplate specifies the cluster name and security group for the AWS subnet and applies tags to AWS nodes.
 
-Validate in cluster:
-
-```bash
-kubectl get deployment -n karpenter
-```
-
-> Note: Karpenter is not yet deployed
+:::info
+Karpenter is not yet deployed
+:::
 
 ## Applications Folder
 
@@ -104,6 +102,4 @@ Validate in cluster:
 
 ```bash
 kubectl get deployment -ndefault
-
-kubectl get cronjob -ndefault
 ```
