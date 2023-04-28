@@ -6,9 +6,13 @@ sidebar_position: 5
 
 # Export your GitHub's personal access token and username:
 
-:heavy_exclamation_mark: If you don't have one token yet, check the [Creating a personal access token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). :heavy_exclamation_mark:
+:::info
+If you don't have one token yet, check the [Creating a personal access token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+:::
 
-> Remember to use the GitHub legacy tokens
+:::caution
+Remember to use the GitHub legacy tokens
+:::
 
 ```bash
 export GITHUB_TOKEN=<your-token>
@@ -20,7 +24,7 @@ echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" | tee -a ~/.bash_profile
 echo "export GITHUB_USER=${GITHUB_USER}" | tee -a ~/.bash_profile
 ```
 
-### Create a fork of this [repo](https://github.com/lusoal/eks-cluster-upgrades-reference-arch.git) in your GitHub account.
+### Create a fork of this [repo](https://github.com/aws-samples/eks-cluster-upgrades-workshop) in your GitHub account.
 
 ![Create fork](../../static/img/create-fork01.png)
 
@@ -32,4 +36,7 @@ echo "export GITHUB_USER=${GITHUB_USER}" | tee -a ~/.bash_profile
 ```bash
 git clone https://github.com/$GITHUB_USER/eks-cluster-upgrades-reference-arch.git
 ```
-> It may ask for `username` and `password`, for the password use your `$GITHUB_TOKEN` instead
+
+:::tip
+It may ask for `username` and `password`, for the password use your `$GITHUB_TOKEN` instead
+:::

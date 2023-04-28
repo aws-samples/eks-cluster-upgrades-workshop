@@ -84,7 +84,7 @@ const config = {
             type: 'doc',
             docId: 'explore-environment/why-gitops',
             position: 'left',
-            label: 'Exploring environment',
+            label: 'Exploring',
           },
           {
             type: 'doc',
@@ -96,13 +96,13 @@ const config = {
             type: 'doc',
             docId: 'karpenter-scaling/karpenter-scaling',
             position: 'left',
-            label: 'Karpenter Scaling',
+            label: 'Karpenter',
           },
           {
             type: 'doc',
             docId: 'validating-state/validating-state',
             position: 'left',
-            label: 'Validating State',
+            label: 'Validating',
           },
           {
             type: 'doc',
