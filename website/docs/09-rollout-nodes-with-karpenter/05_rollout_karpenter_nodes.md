@@ -6,7 +6,13 @@ sidebar_position: 5
 
 # Rollout nodes with adjusted PDB 
 
-Now, open a new terminal and check the Nodes:
+Now, try to drain your node again:
+
+```bash
+kubectl drain $(kubectl get nodes -l node-type=applications -oname) --ignore-daemonsets
+```
+
+Open a new terminal e execute the following command:
 
 ```bash
 kubectl get nodes -l node-type=applications

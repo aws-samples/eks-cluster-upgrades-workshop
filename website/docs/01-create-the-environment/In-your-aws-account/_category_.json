@@ -1,8 +1,0 @@
-{
-  "label": "In your AWS account",
-  "position": 3,
-  "link": {
-    "type": "generated-index",
-    "description": "Using your own AWS account"
-  }
-}

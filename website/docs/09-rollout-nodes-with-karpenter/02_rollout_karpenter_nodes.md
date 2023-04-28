@@ -25,7 +25,9 @@ spec:
 EOF
 ```
 
-> The above PDB is consider too AGRESSIVE, because we have 3 replicas running, and we are saying that we want 3 as minimum available.
+:::note
+The above PDB is consider too **AGRESSIVE**, because we have 3 replicas running, and we are saying that we want 3 as minimum available.
+:::
 
 Add this new line to the `kustomization.yaml` manifest file, so Flux will know that needs to watch it.
 
@@ -49,7 +51,9 @@ resources:
   - 01-pdb-sample-app.yaml
 ```
 
-> Now Flux will watch the newly PDB created file.
+:::note
+Now Flux will watch the newly PDB created file.
+:::
 
 Commit and push the changes to the repository:
 

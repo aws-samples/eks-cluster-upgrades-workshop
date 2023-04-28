@@ -11,6 +11,7 @@ Let's verify if we need to upgrade our managed add-ons, we are using `core-dns`,
 ```bash
 eksctl get addons -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
-
-> You will be able to see in the output under `UPDATE AVAILABLE`
+:::note
+You will be able to see in the output under `UPDATE AVAILABLE`
+:::
 

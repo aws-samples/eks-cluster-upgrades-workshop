@@ -10,9 +10,13 @@ After upgrading the EKS Control Plane, we need to upgrade the data plane nodes i
 
 In this module we will be focusing on how to upgrade the `managed node groups` in out EKS cluster.
 
-> **Upgrading the data plane after the control plane** ensures that the worker nodes are compatible with the updated control plane components and that the network and storage configurations are updated to work with the new versions.
+:::info
+**Upgrading the data plane after the control plane** ensures that the worker nodes are compatible with the updated control plane components and that the network and storage configurations are updated to work with the new versions.
+:::
 
-> :bangbang: A node’s kubelet can’t be newer than kube-apiserver
+:::caution
+A node’s kubelet can’t be newer than kube-apiserver
+:::
 
 ## Verifying the managed node groups environment
 
@@ -46,6 +50,10 @@ eksctl upgrade nodegroup \
   --kubernetes-version=$K8S_TARGET_VERSION
 ```
 
+:::note
+Hey, might be a good time for a break!
+:::
+
 When you initiate a managed node group update, Amazon EKS automatically updates your nodes for you, completing the steps listed in [Managed node update behavior](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-update-behavior.html).
 
 You can monitor the update by open a **new terminal in Cloud9**, and execute the following command:
@@ -54,7 +62,9 @@ You can monitor the update by open a **new terminal in Cloud9**, and execute the
 kubectl get nodes -l alpha.eksctl.io/nodegroup-name=managed-node-add-ons -w
 ```
 
-> You will see that EKS will launch new nodes with the newest version, and then `cordon` and `drain` the old nodes.
+:::tip
+You will see that EKS will launch new nodes with the newest version, and then `cordon` and `drain` the old nodes.
+:::
 
 After it finishes, you should see the following message:
 
