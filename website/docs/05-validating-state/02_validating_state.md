@@ -13,7 +13,7 @@ Addressing these deprecations is generally straightforward, but locating all ins
 Directly querying the API server may seem like a solution, but it can be misleading. To accurately identify deprecated API versions in your deployment, you can use Pluto. This tool helps detect deprecated versions in various locations and streamlines the process of ensuring compatibility during upgrades.
 
 ```bash
-pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications
+pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications
 ```
 
 The output will display any deprecated APIs found in your manifests, the API removal version, and the replacement API version.

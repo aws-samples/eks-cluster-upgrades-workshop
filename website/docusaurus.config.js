@@ -129,7 +129,7 @@ const config = {
             label: 'Rollout Application Nodes',
           },
           {
-            href: 'https://github.com/lusoal/eks-cluster-upgrades-reference-arch',
+            href: 'https://github.com/aws-samples/eks-cluster-upgrades-workshop',
             label: 'GitHub',
             position: 'right',
           },

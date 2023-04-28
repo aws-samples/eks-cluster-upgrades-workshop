@@ -11,7 +11,7 @@ Using managed add-ons in Amazon EKS can simplify the upgrade process. However, A
 So in oder to verify if we need to upgrade or not before moving to the target version, let's execute the following command.
 
 ```bash
-/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/add-on-validate.sh --validate-support-target-version
+/home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/add-on-validate.sh --validate-support-target-version
 ```
 
 Output should look like this.

@@ -9,13 +9,13 @@ sidebar_position: 6
 After cloning the repo, we will need to change `cluster-template.yaml` file to update personal variables.
 
 ```bash
-envsubst < /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster-template.yaml > /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+envsubst < /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster-template.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 And then create your cluster:
 
 ```bash
-eksctl create cluster -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+eksctl create cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 > This can take few minutes

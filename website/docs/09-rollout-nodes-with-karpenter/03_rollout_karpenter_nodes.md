@@ -77,9 +77,9 @@ As you can see in the above log we got an error when evicting pods due to too ag
 ## Adjusting PDB
 
 ```bash
-rm -rf /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-pdb-sample-app.yaml
+rm -rf /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-pdb-sample-app.yaml
 
-cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-pdb-sample-app.yaml
+cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-pdb-sample-app.yaml
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -98,7 +98,7 @@ EOF
 Commit and push the changes to the repository:
 
 ```bash
-cd /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git add .
 git commit -m "Changed PDB manifest from 3 to 1"
 git push origin main

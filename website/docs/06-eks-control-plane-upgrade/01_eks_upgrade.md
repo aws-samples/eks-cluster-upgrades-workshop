@@ -59,7 +59,7 @@ To update the EKS version in the `cluster.yaml` file located in the helpers fold
 
 ```bash
 echo "Upgrading from version $K8S_CURRENT_VERSION to $K8S_TARGET_VERSION"
-sed "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+sed "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 Output should be similar to this
@@ -74,7 +74,7 @@ metadata:
 Now let's apply the sed command
 
 ```bash
-sed -i "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+sed -i "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 The cluster.yaml file should now reflect the EKS target version version and you can apply it.
@@ -84,7 +84,7 @@ The cluster.yaml file should now reflect the EKS target version version and you 
 Now that the eksctl configurations are ready to be applied we can move forward and apply the change.
 
 ```bash
-eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 This will plan your upgrade with `eksctl`, validating configurations, you should see a similar output:
@@ -103,7 +103,7 @@ This will plan your upgrade with `eksctl`, validating configurations, you should
 Now to confirm the upgrade, let's add `--approve` flag into the command:
 
 ```bash
-eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml --approve
+eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml --approve
 ```
 
 You should see an output similar to this:

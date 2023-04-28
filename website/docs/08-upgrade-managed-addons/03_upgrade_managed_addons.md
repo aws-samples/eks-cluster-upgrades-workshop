@@ -7,7 +7,7 @@ sidebar_position: 3
 # Starting the upgrade
 
 ```bash
-eksctl update addon -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+eksctl update addon -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 The output should be similar to this:
@@ -32,7 +32,7 @@ The output should be similar to this:
 Once its done, we can run the `get addons` command again to validate:
 
 ```bash
-eksctl get addons -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+eksctl get addons -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 > You will be able to see empty fields under `UPDATE AVAILABLE`

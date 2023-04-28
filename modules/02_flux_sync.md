@@ -20,7 +20,7 @@ Flux reconciliation is the process by which Flux continuously monitors a Git rep
 Let's create a HPA manifest, responsible for application scaling for our sample-app.
 
 ```bash
-cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.yaml
+cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -42,13 +42,13 @@ Adding this new manifest in the resource list of the `kustomization.yaml` will e
 Run the command below to uncoment the line `5` of the `kustomization.yaml` file, respective to the `01-hpa-sample-app.yaml` that we just created. 
 
 ```bash
-sed -i "5s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml
+sed -i "5s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml
 ```
 
 Your Kustomization manifest should look like this:
 
 ```bash
-cat /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml 
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml 
 ```
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -64,7 +64,7 @@ Now Flux will watch the newly HPA created file.
 Pull latest changes in the repository, made by Flux.
 
 ```bash
-cd /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git pull origin main
 ```
 

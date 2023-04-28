@@ -34,7 +34,7 @@ echo "export GITHUB_USER=${GITHUB_USER}" | tee -a ~/.bash_profile
 ### Clone your forked in your environment.
 
 ```bash
-git clone https://github.com/$GITHUB_USER/eks-cluster-upgrades-reference-arch.git
+git clone https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git
 ```
 
 :::tip

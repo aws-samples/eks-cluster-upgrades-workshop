@@ -11,7 +11,7 @@ First, we are gonna to create a [PDB (Pod Disruption Budget)](https://kubernetes
 Creating a `PDB` for our sample app:
 
 ```bash
-cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-pdb-sample-app.yaml
+cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-pdb-sample-app.yaml
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -27,7 +27,7 @@ EOF
 
 > The above PDB is consider too AGRESSIVE, because we have 3 replicas running, and we are saying that we want 3 as minimum available.
 
-Adding this new manifest into `kustomization.yaml` file, so flux will know that needs to watch this manifest, open `/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml` and add the file name to it below `02-cronjob.yaml`:
+Adding this new manifest into `kustomization.yaml` file, so flux will know that needs to watch this manifest, open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml` and add the file name to it below `02-cronjob.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -44,7 +44,7 @@ resources:
 Commit and push the changes to the repository:
 
 ```bash
-cd /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git add .
 git commit -m "Added PDB manifest"
 git push origin main

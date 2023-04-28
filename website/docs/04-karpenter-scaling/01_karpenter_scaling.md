@@ -25,7 +25,7 @@ nginx-6b855ddcb7-bbck2   0/1     Pending   0          5s
 nginx-6b855ddcb7-kphps   0/1     Pending   0          4s
 ```
 
-You will see that those 3 replicas are in pending state, this is because there is no Nodes that satisfy the constraints defined in the `/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-sample-app.yaml`:
+You will see that those 3 replicas are in pending state, this is because there is no Nodes that satisfy the constraints defined in the `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-sample-app.yaml`:
 
 ```yaml
 nodeSelector: # Force scale on Karpenter nodes
@@ -82,14 +82,14 @@ eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace karpenter
 Now, we need to enable Karpenter in our cluster, to do that we will need to change `02-karpenter-template.yaml` manifest, replacing the environment variables that we have exported previously.
 
 ```bash
-envsubst < /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/add-ons/02-karpenter-template.yaml > /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/add-ons/02-karpenter.yaml
+envsubst < /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/02-karpenter-template.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/02-karpenter.yaml
 ```
 
-The command above will replace all environment variables from our karpenter template yaml file and forward the output to `/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/add-ons/02-karpenter.yaml`
+The command above will replace all environment variables from our karpenter template yaml file and forward the output to `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/02-karpenter.yaml`
 
 ## Adding newly created Karpenter manifest into Kustomization
 
-Open `/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/add-ons/kustomization.yaml` file, and uncomment `line 5`, your Kustomization manifest should look like this:
+Open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml` file, and uncomment `line 5`, your Kustomization manifest should look like this:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -104,7 +104,7 @@ resources:
 In order to activate Karpenter we will need to commit, so `Flux` controller will sync the manifests from SMC repo to our cluster.
 
 ```bash
-cd /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git add .
 git commit -m "Added Karpenter manifest file"
 git push origin main

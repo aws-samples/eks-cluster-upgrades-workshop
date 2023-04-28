@@ -24,7 +24,7 @@ Flux reconciliation is the process by which Flux continuously monitors a Git rep
 Let's create a HPA manifest, responsible for application scaling for our sample-app.
 
 ```bash
-cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.yaml
+cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -41,7 +41,7 @@ spec:
 EOF
 ```
 
-Adding this new manifest into `kustomization.yaml` file, so flux will know that needs to watch this manifest, open `/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml` file and uncomment line `5`, your Kustomization manifest should look like this:
+Adding this new manifest into `kustomization.yaml` file, so flux will know that needs to watch this manifest, open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml` file and uncomment line `5`, your Kustomization manifest should look like this:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -57,7 +57,7 @@ Now flux will watch the newly HPA created file.
 Pull latest changes made by flux
 
 ```bash
-cd /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git pull origin main
 ```
 
