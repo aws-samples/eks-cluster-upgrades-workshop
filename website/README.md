@@ -6,8 +6,8 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 
 Make sure you have `yarn` package installed. 
 
-[Classic Yarn Package installation](https://classic.yarnpkg.com/lang/en/docs/install/)
-[Install via `corepacp`/`npm`](https://yarnpkg.com/getting-started/install)
+[Classic Yarn Package installation](https://classic.yarnpkg.com/lang/en/docs/install/).  
+[Install via `corepacp`/`npm`](https://yarnpkg.com/getting-started/install).  
 
 ### Clone [this](https://github.com/aws-samples/eks-cluster-upgrades-workshop) repository.
 
