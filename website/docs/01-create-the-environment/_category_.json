@@ -1,0 +1,8 @@
+{
+  "label": "Setup",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Provision EKS environment to perform upgrades"
+  }
+}

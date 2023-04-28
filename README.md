@@ -2,21 +2,34 @@
 
 :bangbang: THIS WORKSHOP IS PERFORMING UPGRADES FROM VERSION `1.23` :bangbang:
 
-> All the best practices still apply for older and newer Kubernetes versions, this workshop will be updated based on Amazon EKS release launch
+This workshop covers best practices that are applicable for both older and newer versions of Kubernetes. We are committed to keeping our content up-to-date with the latest Amazon EKS releases, Let's get started!
 
-<p align="center">
-<img src="./docs/static/eks-upgrades-architecture.png">
-</p>
+## Introduction
 
-# Description
+The Amazon cluster upgrades workshop is built to provide you with a reference architecture that can help make your Amazon EKS Cluster upgrades less painful and more seamless. To achieve this, we will be using a GitOps strategy with Fluxv2 for components reconciliation and Karpenter for Node Scaling.
 
-The goal of this workshop is to present to customer a reference architecture that can make the Amazon EKS Cluster upgrade process less painful and smoothly by using a GitOps strategy with Fluxv2 for components reconciliation and Karpenter for Node Scaling. Using a GitOps mono repository approach for deploying both add-ons and applications makes it easier during upgrade process since we have just once place to look at api deprecated/removed versions and guarantee add-on backwards compatibility.
+### Why this architecture?
 
-# Modules
+One of the key benefits of using GitOps is that it enables us to use a mono repository approach for deploying both add-ons and applications. This approach makes the upgrade process much smoother because we have a single location to look at for deprecated API versions and ensure that add-ons are backwards compatible.
 
-In this section you can find all the necessary files for the workshop module reference. Feel free to explore and use these files as a reference for your other modules.
+![EKS Architecture](docs/static/eks-upgrades-architecture.png)
 
-> Check the `modules` folder with docs for each module for the workshop.
+By the end of this workshop, you will have a solid understanding of how to use GitOps with Fluxv2 and Karpenter to simplify the EKS Cluster upgrade process. We hope that this will help you to streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
+
+
+## Navigating the repository
+
+The top level repository can be split is to several areas.
+
+### Site content
+
+The workshop content itself is a `docusaurus` site. All workshop content is written using Markdown and can be found in `website`.
+
+### Learner environment
+
+To spin -up your learn environment, go to [`website`](./website/README.md#local-development) page and follow the instructions to run your docussaurus website.
+
+<!-- In this section you can find all the necessary files for the workshop module reference. Feel free to explore and use these files as a reference for your other modules.
 
 - [Creating the environment](./modules/)
 - [Exploring the environment](./modules/01_gitops_files.md)
@@ -32,50 +45,16 @@ In this section you can find all the necessary files for the workshop module ref
 - [Upgrade Managed Add-ons](./modules/07_upgrade_managed_addons.md)
 - [Rollout nodes with Karpenter](./modules/08_rollout_karpenter_nodes.md)
   - [PDB in action](./modules/08_rollout_karpenter_nodes.md#pdb-in-action)
-- TBD [Wrap-up upgrade]()
+- TBD [Wrap-up upgrade]() -->
 
----
-# Collaboration Guide
 
-Follow these steps to collaborate on this repository:
+## Security
 
-1. **Clone the repository to your local machine:**
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
-```bash
-git clone https://github.com/lusoal/eks-cluster-upgrades-reference-arch.git
-```
+## License
 
-2. **Create a new branch with a descriptive name, where new-feature-branch is the name of your new branch:**
-
-```bash
-git checkout -b new-feature-branch
-```
-
-3. **Commit the changes with a descriptive message:**
-
-```bash
-git commit -m "Add a description of your changes"
-```
-
-4. **Open a pull request**
-
-- Go to the repository on GitHub.
-
-- Click on the "Pull Requests" tab.
-
-- Click on the "New Pull Request" button.
-
-- Choose your new-feature-branch as the "compare" branch and the main branch (usually main or master) as the "base" branch.
-
-- Add a descriptive title and a detailed description of your changes in the provided fields.
-
-- Click on "Create Pull Request" to submit your changes for review.
-
-Once your pull request has been reviewed and approved by the repository maintainer, they will merge your changes into the main branch. If they request any changes, you can make additional commits to your branch and push them; they will automatically be added to the existing pull request.
-
-Remember to keep your fork and local repository up-to-date with the upstream repository by periodically fetching and merging changes.
-
-**Happy collaborating!**
+This project is licensed under the Apache-2.0 License.
 
 
 

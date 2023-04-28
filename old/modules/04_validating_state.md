@@ -16,13 +16,13 @@ Directly querying the API server may seem like a solution, but it can be mislead
 First, let's uncomment the lines of our `kustomization.yaml`, in the `applications` directory to make sure Pluto will run it's validation throught them.
 
 ```bash
-sed -i "6s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml
+sed -i "6s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml
 ```
 
 Now we can run Pluto in the `applications` directory.
 
 ```bash
-pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications
+pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications
 ```
 
 The output will display any deprecated APIs found in your manifests, the API removal version, and the replacement API version.
@@ -59,7 +59,7 @@ Using managed add-ons in Amazon EKS can simplify the upgrade process. However, A
 So in oder to verify if we need to upgrade or not before moving to the target version, let's execute the following command.
 
 ```bash
-/home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/add-on-validate.sh --validate-support-target-version
+/home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/add-on-validate.sh --validate-support-target-version
 ```
 
 Output should look like this.
@@ -83,19 +83,19 @@ For each deprecated API, run the following command:
 1. Converting Cronjob:
 
 ```bash
-kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/02-cronjob.yaml > /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/02-cronjob.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/02-cronjob.bak /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/02-cronjob.yaml
+kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml
 ```
 
 2. Converting HPA:
 
 ```bash
-kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.yaml > /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.bak /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.yaml
+kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml
 ```
 
 1. Validate the `02-cronjob.yaml` file, you will see that the `apiVersion` changed from `batch/v1beta1` to `batch/v1`
 
 ```bash
-cat /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/02-cronjob.yaml
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml
 ```
 
 ```yaml output
@@ -110,7 +110,7 @@ spec:
 4. Validate the `01-hpa-sample-app.yaml` file, you will see that the `apiVersion` changed from `autoscaling/v2beta1` to `autoscaling/v1`
 
 ```bash
-cat /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.yaml`
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml`
 ```
 ```yaml
 apiVersion: autoscaling/v2
@@ -126,7 +126,7 @@ spec:
 After all the changes were made you can rerun Pluto to validate nothing is missing.
 
 ```bash
-pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications
+pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications
 ```
 
 This time you should have output without needed changes:

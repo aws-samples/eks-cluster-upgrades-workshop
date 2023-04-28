@@ -1,4 +1,10 @@
-## GitOps Reconciliation flow
+---
+id: gitops-reconciliation
+sidebar_label: 'Flux reconciliation flow'
+sidebar_position: 1
+---
+
+# GitOps Reconciliation flow
 
 In this step-by-step guide, we will walk through the process of GitOps reconciliation using Flux in a Kubernetes cluster. We'll modify the `gitops/applications/01-sample-app.yaml` file from your forked repository and observe Flux detecting and applying the changes.
 
@@ -6,9 +12,7 @@ In this step-by-step guide, we will walk through the process of GitOps reconcili
 
 Flux reconciliation is the process by which Flux continuously monitors a Git repository for changes to Kubernetes manifests and automatically applies them to a connected cluster. When a change is detected in the repository, Flux compares the updated manifest with the current state of the cluster. If there's a discrepancy, Flux updates the cluster to match the desired state defined in the Git repository. This GitOps-based approach ensures consistency, version control, and automation in managing Kubernetes deployments, streamlining CI/CD pipelines, and reducing human error.
 
-<p align="center">
-<img src="../docs/static/gitops-toolkit.png">
-</p>
+![GitOps toolkit](../../static/img/gitops-toolkit.png)
 
 ## Requirements
 
@@ -20,7 +24,7 @@ Flux reconciliation is the process by which Flux continuously monitors a Git rep
 Let's create a HPA manifest, responsible for application scaling for our sample-app.
 
 ```bash
-cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/01-hpa-sample-app.yaml
+cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -42,13 +46,13 @@ Adding this new manifest in the resource list of the `kustomization.yaml` will e
 Run the command below to uncoment the line `5` of the `kustomization.yaml` file, respective to the `01-hpa-sample-app.yaml` that we just created. 
 
 ```bash
-sed -i "5s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml
+sed -i "5s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml
 ```
 
 Your Kustomization manifest should look like this:
 
 ```bash
-cat /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/gitops/applications/kustomization.yaml 
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml 
 ```
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -56,7 +60,7 @@ kind: Kustomization
 resources:
   - 01-sample-app.yaml
   - 01-hpa-sample-app.yaml
-  - 02-cronjob.yaml
+  # - 02-cronjob.yaml
 ```
 
 Now Flux will watch the newly HPA created file.
@@ -64,7 +68,7 @@ Now Flux will watch the newly HPA created file.
 Pull latest changes in the repository, made by Flux.
 
 ```bash
-cd /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git pull origin main
 ```
 

@@ -1,3 +1,5 @@
+:bangbang:THIS MODULES WERE MOVED TO DOCUSSAURUS, YOU CAN FIND IT [HERE](../website/) :bangbang:
+
 # Creating the environment
 
 In order to properly start the environment you will need to deploy the following Cloudformation template:
@@ -26,7 +28,7 @@ echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" | tee -a ~/.bash_profile
 echo "export GITHUB_USER=${GITHUB_USER}" | tee -a ~/.bash_profile
 ```
 
-## Create a fork of this [repo](https://github.com/lusoal/eks-cluster-upgrades-reference-arch.git) in your GitHub account.
+## Create a fork of this [repo](https://github.com/lusoal/eks-cluster-upgrades-workshop.git) in your GitHub account.
 
 <p align="center">
 <img src="../docs/static/create-fork01.png">
@@ -40,20 +42,20 @@ echo "export GITHUB_USER=${GITHUB_USER}" | tee -a ~/.bash_profile
 ## Clone your forked in your environment.
 
 ```bash
-git clone https://github.com/$GITHUB_USER/eks-cluster-upgrades-reference-arch.git
+git clone https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git
 ```
 > It may ask for `username` and `password`, for the password use your `$GITHUB_TOKEN` instead
 
 After cloning the repo, we will need to change `cluster-template.yaml` file to update personal variables.
 
 ```bash
-envsubst < /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster-template.yaml > /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+envsubst < /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster-template.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 # Create your EKS Cluster.
 
 ```bash
-eksctl create cluster -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+eksctl create cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 ## Export your Cluster Endpoint.

@@ -1,3 +1,9 @@
+---
+id: eks-upgrade
+sidebar_label: 'How AWS Manages EKS Upgrades'
+sidebar_position: 1
+---
+
 # EKS Upgrade
 
 In this guide, we'll go through the process of upgrading your Amazon Elastic Kubernetes Service (EKS) cluster, which is essential for maintaining optimal performance, security, and availability.
@@ -9,9 +15,8 @@ We also will cover the importance of updates, how AWS manages EKS upgrades, and 
 
 The EKS upgrade process is managed by AWS to ensure a seamless and safe transition between Kubernetes versions. Here is a detailed breakdown of the steps AWS takes to upgrade the EKS control plane:
 
-<p align="center">
-<img src="../docs/static/eks-blue-green-upgrades.png">
-</p>
+![BLUE GREEN](../../static/img/eks-blue-green-upgrades.png)
+
 
 1. **Pre-upgrade checks**: AWS first performs pre-upgrade checks, including assessing the current cluster state and evaluating the compatibility of the new version with your workloads. If any issues are detected, the upgrade process will not proceed.
 
@@ -31,9 +36,7 @@ The EKS upgrade process is managed by AWS to ensure a seamless and safe transiti
 
 ## EKS Rollback on Upgrade Failure
 
-<p align="center">
-<img src="../docs/static/eks-rollback.png">
-</p>
+![BLUE GREEN](../../static/img/eks-rollback.png)
 
 In case an EKS upgrade fails, AWS has measures in place to minimize disruption and revert the control plane to its previous version:
 
@@ -56,7 +59,7 @@ To update the EKS version in the `cluster.yaml` file located in the helpers fold
 
 ```bash
 echo "Upgrading from version $K8S_CURRENT_VERSION to $K8S_TARGET_VERSION"
-sed "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+sed "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 Output should be similar to this
@@ -71,7 +74,7 @@ metadata:
 Now let's apply the sed command
 
 ```bash
-sed -i "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+sed -i "s/$K8S_CURRENT_VERSION/$K8S_TARGET_VERSION/g"  /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 The cluster.yaml file should now reflect the EKS target version version and you can apply it.
@@ -81,7 +84,7 @@ The cluster.yaml file should now reflect the EKS target version version and you 
 Now that the eksctl configurations are ready to be applied we can move forward and apply the change.
 
 ```bash
-eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml
+eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
 
 This will plan your upgrade with `eksctl`, validating configurations, you should see a similar output:
@@ -100,7 +103,7 @@ This will plan your upgrade with `eksctl`, validating configurations, you should
 Now to confirm the upgrade, let's add `--approve` flag into the command:
 
 ```bash
-eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-reference-arch/helpers/cluster.yaml --approve
+eksctl upgrade cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml --approve
 ```
 
 You should see an output similar to this:
