@@ -10,21 +10,25 @@ After identifying the deprecated APIs, you can use kubectl convert to update you
 
 For each deprecated API, run the following command:
 
-Converting Cronjob:
+1. Converting Cronjob:
 
 ```bash
 kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml
 ```
 
-Converting HPA:
+2. Converting HPA:
 
 ```bash
 kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml
 ```
 
-Open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml` file, you will see that the `apiVersion` changed from `batch/v1beta1` to `batch/v1`
+1. Validate the `02-cronjob.yaml` file, you will see that the `apiVersion` changed from `batch/v1beta1` to `batch/v1`
 
-```yaml
+```bash
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/02-cronjob.yaml
+```
+
+```yaml output
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -33,8 +37,11 @@ metadata:
 spec:
 ```
 
-Open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml` file, you will see that the `apiVersion` changed from `autoscaling/v2beta1` to `autoscaling/v1`
+4. Validate the `01-hpa-sample-app.yaml` file, you will see that the `apiVersion` changed from `autoscaling/v2beta1` to `autoscaling/v1`
 
+```bash
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml`
+```
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -44,7 +51,7 @@ metadata:
 spec:
 ```
 
-## Validate your changes with Pluto 
+## Validate with Pluto your changes
 
 After all the changes were made you can rerun Pluto to validate nothing is missing.
 
@@ -54,7 +61,7 @@ pluto detect-files -d /home/ec2-user/environment/eks-cluster-upgrades-workshop/g
 
 This time you should have output without needed changes:
 
-```bash
+```output
 There were no resources found with known deprecated apiVersions.
 
 

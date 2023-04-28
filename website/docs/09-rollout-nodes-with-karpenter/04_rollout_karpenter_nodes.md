@@ -7,9 +7,7 @@ sidebar_position: 4
 # Adjusting PDB
 
 ```bash
-rm -rf /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-pdb-sample-app.yaml
-
-cat <<'EOF' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-pdb-sample-app.yaml
+cat <<'EOF' > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-pdb-sample-app.yaml
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -34,10 +32,10 @@ git commit -m "Changed PDB manifest from 3 to 1"
 git push origin main
 ```
 
-Wait few seconds, and validate that flux has applied the new PDB:
+Wait few seconds, and validate that Flux has applied the new PDB:
 
 ```bash
-kubectl get pdb/nginx-pdb -ndefault
+kubectl -n default get pdb/nginx-pdb
 ```
 
 You should see the output similar to this:

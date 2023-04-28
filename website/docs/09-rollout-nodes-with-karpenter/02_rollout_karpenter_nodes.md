@@ -27,7 +27,17 @@ EOF
 
 > The above PDB is consider too AGRESSIVE, because we have 3 replicas running, and we are saying that we want 3 as minimum available.
 
-Adding this new manifest into `kustomization.yaml` file, so flux will know that needs to watch this manifest, open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml` and add the file name to it below `02-cronjob.yaml`:
+Add this new line to the `kustomization.yaml` manifest file, so Flux will know that needs to watch it.
+
+```bash
+echo -e '  - 01-pdb-sample-app.yaml' >> /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml
+```
+Your `kustomization.yaml` should look like this.
+
+
+```bash
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml
+```
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -39,7 +49,7 @@ resources:
   - 01-pdb-sample-app.yaml
 ```
 
-> Now flux will watch the newly PDB created file.
+> Now Flux will watch the newly PDB created file.
 
 Commit and push the changes to the repository:
 
@@ -53,7 +63,7 @@ git push origin main
 Flux will now detect the changes and start the reconciliation process. It does this by periodically polling the GitHub repository for changes. You can monitor the Flux logs to observe the reconciliation process:
 
 ```bash
-kubectl get po -nflux-system | grep -i source | awk '{print $1}' | while read line; do kubectl -n flux-system logs -f $line --since=1m; done
+kubectl -n flux-system get pod -o name | grep -i source | while read POD; do kubectl -n flux-system logs -f $POD --since=1m; done
 ```
 
 You should see logs indicating that the new changes have been detected and applied to the cluster:
@@ -65,7 +75,7 @@ You should see logs indicating that the new changes have been detected and appli
 Verify if PDB was created:
 
 ```bash
-kubectl get pdb/nginx-pdb -ndefault
+kubectl -n default get pdb/nginx-pdb
 ```
 
 The output should look like this:

@@ -4,13 +4,7 @@ sidebar_label: 'Rollout nodes with right PDB'
 sidebar_position: 5
 ---
 
-# Rollout nodes fixed PDB 
-
-Now let's drain our Node again, using `kubectl drain` to safely evict all of your pods from your old nodes to the new ones.
-
-```bash
-kubectl drain $(kubectl get nodes -l node-type=applications -oname) --ignore-daemonsets
-```
+# Rollout nodes with adjusted PDB 
 
 Now, open a new terminal and check the Nodes:
 
@@ -30,7 +24,7 @@ As you can see, we have two nodes managed by Karpenter, one that is being draine
 
 ```bash
 kubectl get nodes -l node-type=applications
-kubectl get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+kubectl -n default get pods -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName
 ```
 
 You should now be able to see only a single Node managed by Karpenter, and all pods running in this new Node.

@@ -4,17 +4,17 @@ sidebar_label: 'Applying your changes'
 sidebar_position: 5
 ---
 
-# Applying changes
+## Applying changes
 
-Before apply the changes let's verify which `apiVersion` flux has in its inventory
+Before apply the changes let's verify which `apiVersion` Flux has in its inventory
 
 ```bash
-kubectl describe kustomization/apps -nflux-system | grep -i inventory -A7
+kubectl -n flux-system describe kustomization/apps | grep -i inventory -A7
 ```
 
 Output should be similar to this:
 
-```yaml
+```yaml output
 Inventory:
   Entries:
     Id:                   default_nginx_apps_Deployment
@@ -34,15 +34,15 @@ git commit -m "Updated deprecated APIs"
 git push origin main
 ```
 
-Finally, let's verify flux inventory again, it can take few minutes to update:
+Finally, let's verify Flux inventory again, it can take few minutes to update:
 
 ```bash
-kubectl describe kustomization/apps -nflux-system | grep -i inventory -A7
+kubectl -n flux-system describe kustomization/apps | grep -i inventory -A7
 ```
 
 Output should look like this, as you can see the `apiVersions` have changed
 
-```yaml
+```yaml output
 Inventory:
   Entries:
     Id:                   default_nginx_apps_Deployment

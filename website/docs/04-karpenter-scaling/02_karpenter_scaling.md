@@ -8,8 +8,6 @@ sidebar_position: 2
 
 Giving access to Karpenter's role in `aws-auth` configmap using eksctl.
 
-> All the required roles and policies were created using `Cloudformation`
-
 ```bash
 eksctl create iamidentitymapping \
   --username system:node:{{EC2PrivateDNSName}} \
@@ -47,9 +45,14 @@ The command above will replace all environment variables from our karpenter temp
 
 ## Adding newly created Karpenter manifest into Kustomization
 
-Open `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml` file, and uncomment `line 5`, your Kustomization manifest should look like this:
+Let's uncomment line `5` of the newly created file  `/home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml`. 
 
-```yaml
+```bash
+sed -i "5s/# //g" /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml  
+```
+
+Your Kustomization manifest should look like this:
+```yaml output
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
@@ -59,7 +62,7 @@ resources:
 
 ## Applying changes
 
-In order to activate Karpenter we will need to commit, so `Flux` controller will sync the manifests from SMC repo to our cluster.
+In order to activate Karpenter we will need to commit, so Flux controller will sync the manifests from SCM repo to our cluster.
 
 ```bash
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
@@ -70,15 +73,15 @@ git push origin main
 
 ## Veryfing if Karpenter was deployed
 
-Let's see if flux deployed karpenter `helmrelase` by executing the follow command:
+Let's see if Flux deployed Karpenter `helmrelase` by executing the follow command:
 
 ```bash
-kubectl get helmrelease -nflux-system
+kubectl -n flux-system get helmrelease 
 ```
 
 Your output should look like this:
 
-```bash
+```output
 NAME             AGE     READY   STATUS
 karpenter        58s     True    Release reconciliation succeeded
 metrics-server   3d22h   True    Release reconciliation succeeded
@@ -91,7 +94,7 @@ Make sure the `STATUS` is `Release reconciliation succeeded`
 Karpenter will provision Nodes based on Pods in Pending state, since we already had our `sample-app` Pods in that state let's check if Karpenter already provisioned a Node to handle that workload, first let's validate that our `sample-app` Pods are up and running:
 
 ```bash
-kubectl get po -ndefault
+kubectl -n default get pod
 ```
 
 The output should look like this:
@@ -111,7 +114,7 @@ kubectl get nodes -l node-type=applications
 
 Your output should me similar to this:
 
-```
+```output
 NAME                             STATUS   ROLES    AGE   VERSION
 ip-192-168-60-113.ec2.internal   Ready    <none>   21m   v1.23.xx-eks-a59e1f0
 ```
@@ -121,7 +124,7 @@ ip-192-168-60-113.ec2.internal   Ready    <none>   21m   v1.23.xx-eks-a59e1f0
 To make sure that those Pods are running in this new Node created by Karpenter, let's execute the follow command:
 
 ```bash
-kubectl get pods -ndefault -owide --field-selector spec.nodeName=$(kubectl get nodes -l node-type=applications | grep -i ip | awk '{print $1}')
+kubectl -n default get pods -o wide --field-selector spec.nodeName=$(kubectl get nodes -l node-type=applications | awk '/ip/ {print $1}')
 ```
 
 ```output
