@@ -16,13 +16,11 @@ Output should be similar to this:
 
 ```yaml output
 Inventory:
-  Entries:
-    Id:                   default_nginx_apps_Deployment
-    V:                    v1
-    Id:                   default_hello_batch_CronJob
-    V:                    v1beta1
-    Id:                   default_nginx-hpa_autoscaling_HorizontalPodAutoscaler
-    V:                    v2beta1
+    Entries:
+      Id:                   default_nginx_apps_Deployment
+      V:                    v1
+      Id:                   default_nginx-hpa_autoscaling_HorizontalPodAutoscaler
+      V:                    v2beta1
 ```
 As you can see we are still using deprecated `apiVersions` for `HPA` and `Cronjob`
 

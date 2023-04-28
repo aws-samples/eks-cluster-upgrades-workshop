@@ -1,3 +1,5 @@
+:bangbang:THIS MODULES WERE MOVED TO DOCUSSAURUS, YOU CAN FIND IT [HERE](../website/) :bangbang:
+
 # Creating the environment
 
 In order to properly start the environment you will need to deploy the following Cloudformation template:

@@ -60,7 +60,7 @@ kind: Kustomization
 resources:
   - 01-sample-app.yaml
   - 01-hpa-sample-app.yaml
-  - 02-cronjob.yaml
+  # - 02-cronjob.yaml
 ```
 
 Now Flux will watch the newly HPA created file.

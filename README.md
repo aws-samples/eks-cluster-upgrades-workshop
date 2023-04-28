@@ -17,9 +17,19 @@ One of the key benefits of using GitOps is that it enables us to use a mono repo
 By the end of this workshop, you will have a solid understanding of how to use GitOps with Fluxv2 and Karpenter to simplify the EKS Cluster upgrade process. We hope that this will help you to streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
 
 
-## Modules
+## Navigating the repository
 
-In this section you can find all the necessary files for the workshop module reference. Feel free to explore and use these files as a reference for your other modules.
+The top level repository can be split is to several areas.
+
+### Site content
+
+The workshop content itself is a `docusaurus` site. All workshop content is written using Markdown and can be found in `website`.
+
+### Learner environment
+
+To spin -up your learn environment, go to [`website`](./website/README.md#local-development) page and follow the instructions to run your docussaurus website.
+
+<!-- In this section you can find all the necessary files for the workshop module reference. Feel free to explore and use these files as a reference for your other modules.
 
 - [Creating the environment](./modules/)
 - [Exploring the environment](./modules/01_gitops_files.md)
@@ -35,7 +45,7 @@ In this section you can find all the necessary files for the workshop module ref
 - [Upgrade Managed Add-ons](./modules/07_upgrade_managed_addons.md)
 - [Rollout nodes with Karpenter](./modules/08_rollout_karpenter_nodes.md)
   - [PDB in action](./modules/08_rollout_karpenter_nodes.md#pdb-in-action)
-- TBD [Wrap-up upgrade]()
+- TBD [Wrap-up upgrade]() -->
 
 
 ## Security

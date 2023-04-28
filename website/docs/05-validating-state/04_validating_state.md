@@ -40,7 +40,7 @@ spec:
 4. Validate the `01-hpa-sample-app.yaml` file, you will see that the `apiVersion` changed from `autoscaling/v2beta1` to `autoscaling/v1`
 
 ```bash
-cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml`
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/01-hpa-sample-app.yaml
 ```
 ```yaml
 apiVersion: autoscaling/v2
