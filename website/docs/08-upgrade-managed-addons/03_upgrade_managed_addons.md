@@ -34,8 +34,9 @@ Once its done, we can run the `get addons` command again to validate:
 ```bash
 eksctl get addons -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
 ```
-
-> You will be able to see empty fields under `UPDATE AVAILABLE`
+:::note
+You will be able to see empty fields under `UPDATE AVAILABLE`
+:::
 
 ## Conclusion
 

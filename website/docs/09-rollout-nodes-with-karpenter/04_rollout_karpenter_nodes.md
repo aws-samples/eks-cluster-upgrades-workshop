@@ -21,7 +21,10 @@ spec:
 EOF
 ```
 
-> We have changed the `minAvailable` from `3` to `1`, this will give us space to drain.
+:::tip
+We have changed the `minAvailable` from `3` to `1`, this will give us space to drain.
+:::
+
 
 Commit and push the changes to the repository:
 

@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'EKS Upgrades Workshop',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'How to perform EKS cluster upgrades?',
   favicon: 'img/favicon.png',
 
   // Set the production url of your site here
@@ -126,7 +126,13 @@ const config = {
             type: 'doc',
             docId: 'rollout-nodes-with-karpenter/rollout-nodes',
             position: 'left',
-            label: 'Rollout Application Nodes',
+            label: 'Rollout Karpenter Nodes',
+          },
+          {
+            type: 'doc',
+            docId: 'Conclusion',
+            position: 'left',
+            label: 'Conclusion',
           },
           {
             href: 'https://github.com/aws-samples/eks-cluster-upgrades-workshop',
