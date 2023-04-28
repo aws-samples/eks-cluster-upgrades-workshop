@@ -3,6 +3,6 @@
   "position": 3,
   "link": {
     "type": "generated-index",
-    "description": "Execute Cloudformation"
+    "description": "Using your own AWS account"
   }
 }

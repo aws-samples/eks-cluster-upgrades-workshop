@@ -4,7 +4,7 @@ sidebar_label: 'Flux folder structure'
 sidebar_position: 2
 ---
 
-# Exploring the environment, flux folder structure:
+# Introduction
 
 In this topic, we will explore the Flux configurations within the GitHub repository. We will examine the contents and purpose of each file in the Applications and Add-ons folders, offering a clear understanding of the repository's structure and how it contributes to managing Kubernetes deployments through GitOps principles.
 
