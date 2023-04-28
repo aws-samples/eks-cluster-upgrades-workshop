@@ -7,11 +7,11 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'EKS Upgrades Workshop',
-  tagline: 'How to perform EKS cluster upgrades?',
+  tagline: 'Using Fluxv2 and Karpenter for a smoothly EKS cluster upgrade',
   favicon: 'img/favicon.png',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://eks-upgrades-workshop.netlify.app/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -74,6 +74,12 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
+          {
+            type: 'doc',
+            docId: 'intro',
+            position: 'left',
+            label: 'Introduction',
+          },
           {
             type: 'doc',
             docId: 'create-the-environment/select-your-environment',
