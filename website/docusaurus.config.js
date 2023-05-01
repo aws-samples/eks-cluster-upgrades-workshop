@@ -136,7 +136,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'Cleanup',
+            docId: 'cleanup',
             position: 'left',
             label: 'Cleanup',
           },
