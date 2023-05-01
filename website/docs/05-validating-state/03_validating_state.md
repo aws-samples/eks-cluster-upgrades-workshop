@@ -1,6 +1,6 @@
 ---
 id: validating-state3
-sidebar_label: 'Check managed add-on upgrade'
+sidebar_label: 'Managed Add-on'
 sidebar_position: 3
 ---
 

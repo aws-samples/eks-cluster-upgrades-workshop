@@ -1,6 +1,6 @@
 ---
 id: eks-upgrade
-sidebar_label: 'How AWS Manages EKS Upgrades'
+sidebar_label: 'Introduction'
 sidebar_position: 1
 ---
 

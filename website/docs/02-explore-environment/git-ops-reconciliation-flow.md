@@ -1,7 +1,7 @@
 ---
 id: gitops-reconciliation
 sidebar_label: 'Flux reconciliation flow'
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # GitOps Reconciliation flow

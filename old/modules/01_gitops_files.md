@@ -4,7 +4,7 @@ One of the main customer challenges regarding EKS Cluster Upgrades is make sure 
 
 # How a mono repo structure can benefit during EKS cluster upgrades?
 
-As mentioned earlier, one of the main challenges that customers face during cluster upgrades is compatibility, we need to validate our application’s manifests, making sure that we are not using anything removed from the API Server. So, using a mono repo strategy can help us on doing those validations easier. We can use tools such as kube-no-trouble and pluto to seek for those deprecated/removed apiVersions into a single place along with kubectl convertplugin that can help us on changing those apiVersions in an automated way. Also this repo structure help us on identifying our self-managed add-ons versions since all the add-ons that we are using are in a single place.
+As mentioned earlier, one of the main challenges that people usually face during cluster upgrades is compatibility, we need to validate our application’s manifests, making sure that we are not using anything removed from the API Server. So, using a mono repo strategy can help us on doing those validations easier. We can use tools such as kube-no-trouble and pluto to seek for those deprecated/removed apiVersions into a single place along with kubectl convertplugin that can help us on changing those apiVersions in an automated way. Also this repo structure help us on identifying our self-managed add-ons versions since all the add-ons that we are using are in a single place.
 
 # Exploring the environment:
 

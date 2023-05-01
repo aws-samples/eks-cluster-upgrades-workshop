@@ -86,6 +86,10 @@ Server Version: version.Info{Major:"1", Minor:"24+", GitVersion:"v1.24.12-eks-ec
 
 ## Conclusion
 
+:::note
+See is that simple!
+:::
+
 In conclusion, the EKS upgrade process focuses primarily on updating the control plane while ensuring **minimal disruption to your workloads**. Automated tests are run to confirm the compatibility of your applications with the upgraded control plane. However, it is important to note that the worker nodes will still be running on the older Kubernetes version after the control plane upgrade. To fully complete the upgrade process, you'll need to update your worker nodes separately, following the recommended upgrade procedures to maintain consistency and stability across your entire cluster.
 
 

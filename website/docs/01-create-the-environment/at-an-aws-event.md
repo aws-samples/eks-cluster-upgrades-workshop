@@ -30,4 +30,4 @@ Select the **Open AWS Console** button to be taken to your AWS account console:
 
 ![Open Console](./assets/openconsole.png)
 
-Proceed to the [Accessing the IDE](../ide) section to access your Cloud9 IDE environment.
+Proceed to the [Accessing the IDE](/docs/create-the-environment/accessing-ide) section to access your Cloud9 IDE environment.

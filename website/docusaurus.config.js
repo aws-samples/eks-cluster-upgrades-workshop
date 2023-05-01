@@ -90,12 +90,6 @@ const config = {
             type: 'doc',
             docId: 'explore-environment/why-gitops',
             position: 'left',
-            label: 'Exploring',
-          },
-          {
-            type: 'doc',
-            docId: 'gitops-reconciliation/gitops-reconciliation',
-            position: 'left',
             label: 'GitOps',
           },
           {
@@ -120,19 +114,19 @@ const config = {
             type: 'doc',
             docId: 'managed-nodes-upgrade/managed-nodes-upgrade',
             position: 'left',
-            label: 'Managed Nodes',
-          },
+            label: 'Nodes',
+          }, 
           {
             type: 'doc',
             docId: 'upgrade-managed-addons/managed-addons-upgrade',
             position: 'left',
-            label: 'Managed Add-ons',
+            label: 'Add-ons',
           },
           {
             type: 'doc',
             docId: 'rollout-nodes-with-karpenter/rollout-nodes',
             position: 'left',
-            label: 'Rollout Karpenter Nodes',
+            label: 'Karpenter Rollout',
           },
           {
             type: 'doc',

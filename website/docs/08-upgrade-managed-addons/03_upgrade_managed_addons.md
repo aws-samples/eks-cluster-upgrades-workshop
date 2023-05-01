@@ -40,5 +40,5 @@ You will be able to see empty fields under `UPDATE AVAILABLE`
 
 ## Conclusion
 
-In conclusion, customers should consider using EKS Managed Add-ons as they provide a seamless and integrated experience for managing common Kubernetes workloads. Furthermore, upgrading EKS Managed Add-ons can be made easier with the use of eksctl, which provides a streamlined and automated approach to upgrading the add-ons. With eksctl, customers can easily upgrade their add-ons with minimal manual intervention, reducing the risk of downtime and configuration errors.
+In conclusion,  should consider using EKS Managed Add-ons as they provide a seamless and integrated experience for managing common Kubernetes workloads. Furthermore, upgrading EKS Managed Add-ons can be made easier with the use of eksctl, which provides a streamlined and automated approach to upgrading the add-ons. With eksctl, you can easily upgrade your add-ons with minimal manual intervention, reducing the risk of downtime and configuration errors.
 

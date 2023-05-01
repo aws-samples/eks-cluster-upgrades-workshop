@@ -16,13 +16,13 @@ When the main Cloud9 screen opens expand the menu on the left side of the screen
 
 ![Access Cloud9 service menu](./assets/menu.png)
 
-There will be a Cloud9 environment named **eks-workshop** available, click the **Open** button to launch the IDE:
+There will be a Cloud9 environment named **eks-upgrades-workshop** available, click the **Open** button to launch the IDE:
 
 ![Open the Cloud9 IDE](./assets/environment.png)
 
 :::tip
 
-If you do not see the eks-workshop Cloud9 environment this is because it is owned by another IAM user. [Click here](/misc/cloud9-access.md) to see how to resolve the issue.
+If you do not see the eks-upgrades-workshop Cloud9 environment this is because it is owned by another IAM user. Change the owner on Cloud9 Console.
 
 :::
 
@@ -36,11 +36,20 @@ This will open a new tab with a fresh terminal.
 
 You may also close the small terminal at the bottom if you wish.
 
-Your IDE comes pre-configured to access the workshop EKS cluster and also provides a set of tools you will need like the `aws` and `kubectl` CLI tools.
-
-For example, run the following command to get details about your EKS cluster:
+Your IDE comes pre-configured to access the workshop EKS cluster and also provides a set of tools you will need like the `aws` and `kubectl`, `pluto`, `eksctl` CLI tools.
 
 ```bash
+kubectl version
+pluto version
+eksctl version
+aws --version
+```
+
+<!-- For example, run the following command to get details about your EKS cluster: -->
+
+
+<!-- TBD: Provision cluster -->
+<!-- ```bash
 $ aws eks describe-cluster --name $EKS_CLUSTER_NAME
 {
     "cluster": {
@@ -60,4 +69,4 @@ NAME                                         STATUS   ROLES    AGE     VERSION
 ip-10-42-10-176.us-west-2.compute.internal   Ready    <none>   18h     v1.23.9-eks-ba74326
 ip-10-42-10-56.us-west-2.compute.internal    Ready    <none>   18h     v1.23.9-eks-ba74326
 ip-10-42-11-123.us-west-2.compute.internal   Ready    <none>   18h     v1.23.9-eks-ba74326
-```
+``` -->

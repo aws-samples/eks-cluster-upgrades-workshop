@@ -1,6 +1,6 @@
 ---
 id: validating-state2
-sidebar_label: 'Checking for Deprecated APIs with Pluto'
+sidebar_label: 'Pluto'
 sidebar_position: 2
 ---
 

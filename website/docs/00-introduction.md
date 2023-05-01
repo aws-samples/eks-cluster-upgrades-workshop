@@ -6,7 +6,7 @@ sidebar_position: 0
 
 # Introduction
 
-One of the key considerations for customers who have chosen Amazon Elastic Kubernetes Service (EKS) as their container management platform is to plan for cluster upgrades. The Kubernetes project is constantly updating with new features, design updates, and bug fixes, and new minor versions are released on average every three months and are supported for about twelve months after their release.
+One of the key considerations for people who have chosen Amazon Elastic Kubernetes Service (EKS) as their container management platform is to plan for cluster upgrades. The Kubernetes project is constantly updating with new features, design updates, and bug fixes, and new minor versions are released on average every three months and are supported for about twelve months after their release.
 
 ## Kubernetes project release process
 
