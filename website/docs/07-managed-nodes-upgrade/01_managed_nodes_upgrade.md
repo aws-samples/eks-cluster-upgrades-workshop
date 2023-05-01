@@ -4,19 +4,7 @@ sidebar_label: 'Performing managed node groups upgrade'
 sidebar_position: 1
 ---
 
-# EKS Managed Node Groups upgrade
-
-After upgrading the EKS Control Plane, we need to upgrade the data plane nodes in the cluster. This can be done using the `eksctl`, `console` or by using an automated tool such as `AWS CloudFormation` or `Terraform`.
-
-In this module we will be focusing on how to upgrade the `managed node groups` in out EKS cluster.
-
-:::info
-A node’s kubelet can’t be newer than kube-apiserver (For people managing your own AMIs)
-
-**Upgrading the data plane after the control plane** ensures that the worker nodes are compatible with the updated control plane components and that the network and storage configurations are updated to work with the new versions.
-:::
-
-## Verifying the managed node groups environment
+# Verifying the managed node groups environment
 
 For this workshop you are utilizing EKS managed nodegroups in AWS, the update process **can be handled by AWS**, but it is your responsibility to **initiate it**.
 

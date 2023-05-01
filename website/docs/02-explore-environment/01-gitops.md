@@ -1,6 +1,6 @@
 ---
 id: why-gitops
-sidebar_label: 'Why GitOps?'
+sidebar_label: 'Introduction'
 sidebar_position: 1
 ---
 

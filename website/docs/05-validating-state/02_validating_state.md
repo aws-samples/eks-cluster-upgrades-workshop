@@ -41,7 +41,9 @@ For this demonstration all the **self-managed add-ons are installed using Helm (
 pluto detect-helm -o wide
 ```
 
-> **Note:** If you are using a Helm chart to deploy your application, consider using pluto to validate that chart as well.
+:::note
+If you are using a Helm chart to deploy your application, consider using pluto to validate that chart as well.
+:::
 
 The output will display any deprecated apiVersion within the charts.
 
@@ -49,4 +51,6 @@ The output will display any deprecated apiVersion within the charts.
 There were no resources found with known deprecated apiVersions.
 ```
 
->**Note:** In this case there is nothing to update on the charts related to **apiVersion depreciation or removal**, but you should check each individual add-on to see if there is any new release.
+:::note
+In this case there is nothing to update on the charts related to **apiVersion depreciation or removal**, but you should check each individual add-on to see if there is any new release.
+:::

@@ -1,6 +1,6 @@
 ---
 id: managed-addons-upgrade
-sidebar_label: 'Upgrade Managed Add-ons'
+sidebar_label: 'Introduction'
 sidebar_position: 1
 ---
 
