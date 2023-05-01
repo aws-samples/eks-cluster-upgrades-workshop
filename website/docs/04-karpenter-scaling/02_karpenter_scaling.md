@@ -119,7 +119,9 @@ NAME                             STATUS   ROLES    AGE   VERSION
 ip-192-168-60-113.ec2.internal   Ready    <none>   21m   v1.23.xx-eks-a59e1f0
 ```
 
-> In the above command you will see that Karpenter by default will matches the `kubelet` Node version with the EKS Control Plane version.
+:::info
+In the above command you will see that Karpenter by default will matches the `kubelet` Node version with the EKS Control Plane version.
+:::
 
 To make sure that those Pods are running in this new Node created by Karpenter, let's execute the follow command:
 
