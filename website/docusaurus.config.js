@@ -115,7 +115,7 @@ const config = {
             docId: 'managed-nodes-upgrade/managed-nodes-upgrade',
             position: 'left',
             label: 'Nodes',
-          }, 
+          },
           {
             type: 'doc',
             docId: 'upgrade-managed-addons/managed-addons-upgrade',
@@ -133,6 +133,12 @@ const config = {
             docId: 'Conclusion',
             position: 'left',
             label: 'Conclusion',
+          },
+          {
+            type: 'doc',
+            docId: 'cleanup',
+            position: 'left',
+            label: 'Cleanup',
           },
           {
             href: 'https://github.com/aws-samples/eks-cluster-upgrades-workshop',
