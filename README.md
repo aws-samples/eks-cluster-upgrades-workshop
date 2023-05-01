@@ -1,6 +1,6 @@
 # EKS Cluster Upgrades ImmersionDay Module
 
-![Tests](https://github.com/aws-samples/eks-workshop-v2/actions/workflows/production.yaml/badge.svg?branch=main)
+![Tests](https://github.com/aws-samples/eks-cluster-upgrades-workshop/actions/workflows/production.yaml/badge.svg?branch=main)
 
 :bangbang: THIS WORKSHOP IS PERFORMING UPGRADES FROM VERSION `1.23` :bangbang:
 
