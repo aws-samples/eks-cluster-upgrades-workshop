@@ -11,6 +11,6 @@ You can execute this workshop in two different ways, at an `AWS event` or at you
 - [I'm in an AWS event](/docs/create-the-environment/aws-event)
 - [I'm own my own](/docs/create-the-environment/deploy-cloudformation)
 
-:::note
-After selecting how you are going to execute this workshop, all the other modules are the same for both environments
+:::caution
+If executing this workshop in your own AWS account, it might incur some costs, remember to cleanup.
 :::
