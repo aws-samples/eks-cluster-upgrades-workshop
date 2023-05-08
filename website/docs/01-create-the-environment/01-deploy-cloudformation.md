@@ -14,6 +14,6 @@ Give the name, `eks-upgrades-workshop` to you stack
 
 The above Cloudformation script will provision a `Cloud9` instance to use during the workshop, with all the required tools in order to execute the workshop.
 
-:::tip 
-After Cloudformation finishes, wait at **least 10 more minutes** so the SSM script can execute in the Cloud9 instance installing all the needed resources.
+:::tip
+Wai at least `20 minutes` before move on, this will give time to Cloudformation and SSM finishes its deploy. Might be a good time for a break.
 :::

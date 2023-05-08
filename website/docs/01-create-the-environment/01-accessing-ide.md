@@ -32,6 +32,12 @@ Once the IDE has loaded, we recommend you use the **+** button and select **New 
 
 This will open a new tab with a fresh terminal.
 
+:::info
+You might see the following message: `An error occurred (AccessDeniedException) when calling the UpdateEnvironment operation: User: arn:aws:sts::xxxxxxxxxx:assumed-role/eks-upgrades-admin/i-xxxxxxxxxxx is not authorized to perform: cloud9:UpdateEnvironment on resource: xxxxxxxx with an explicit deny in an identity-based policy`
+
+This is because we are disabling AWS temporary credentials, you can ignore it and move on
+:::
+
 ![Shows new Cloud9 terminal](./assets/terminal.png)
 
 You may also close the small terminal at the bottom if you wish.

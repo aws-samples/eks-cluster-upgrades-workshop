@@ -22,6 +22,21 @@ eksctl create cluster -f /home/ec2-user/environment/eks-cluster-upgrades-worksho
 This can take few minutes, might be a goot time for a break!
 :::
 
+## Veryfing Cluster provision
+
+```bash
+kubectl get pods -nflux-system
+kubectl get kustomization -nflux-system
+```
+
+You should see the following output
+
+![Open the Cloud9 IDE](./assets/cluster_validation.png)
+
+:::caution
+If you don't see flux pods you might need to re-run the cluster provision again, this is mandatory in order to properly execute the workshop
+:::
+
 ## Export your Cluster Endpoint.
 
 ```bash

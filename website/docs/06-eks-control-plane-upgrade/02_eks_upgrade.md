@@ -65,6 +65,10 @@ You should see an output similar to this:
 2023-04-24 20:12:17 [ℹ]  will upgrade cluster "eks-upgrade-demo" control plane from current version "1.23" to "1.24"
 ```
 
+:::info
+Might take 10 minutes, so you know, take a break.
+:::
+
 After the changes were applied, the control plane will already be running on v1.24 and you should see:
 
 ```bash

@@ -104,3 +104,7 @@ kubectl -n default get hpa/nginx-hpa
 NAME        REFERENCE          TARGETS         MINPODS   MAXPODS   REPLICAS
 nginx-hpa   Deployment/nginx   <unknown>/80%   1         10        3       
 ```
+
+:::info
+You are seeing `<unknown>` because our application pods are not yet deployed.
+:::

@@ -50,9 +50,12 @@ Let's uncomment line `5` of the newly created file  `/home/ec2-user/environment/
 ```bash
 sed -i "5s/# //g" /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml  
 ```
-
+```bash
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml
+```
 Your Kustomization manifest should look like this:
-```yaml output
+
+```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
@@ -76,7 +79,7 @@ git push origin main
 Let's see if Flux deployed Karpenter `helmrelase` by executing the follow command:
 
 ```bash
-kubectl -n flux-system get helmrelease 
+kubectl -n flux-system get helmrelease -w
 ```
 
 Your output should look like this:
@@ -105,6 +108,10 @@ nginx-6b855ddcb7-457ls   1/1     Running   0          58m
 nginx-6b855ddcb7-bbck2   1/1     Running   0          58m
 nginx-6b855ddcb7-kphps   1/1     Running   0          58m
 ```
+
+:::tip
+If it still on pending state, wait few min and try again
+:::
 
 Now let's verify the new Node by passing `node-type=applications` label:
 

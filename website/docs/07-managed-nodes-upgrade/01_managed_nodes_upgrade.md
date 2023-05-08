@@ -37,14 +37,10 @@ eksctl upgrade nodegroup \
 ```
 
 :::note
-Hey, might be a good time for a break!
+Hey, might be a good time to read the link below!
 :::
 
 When you initiate a managed node group update, Amazon EKS automatically updates your nodes for you, completing the steps listed in [Managed node update behavior](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-update-behavior.html).
-
-:::tip
-You should check the link above later!
-:::
 
 You can monitor the update by open a **new terminal in Cloud9**, and execute the following command:
 
