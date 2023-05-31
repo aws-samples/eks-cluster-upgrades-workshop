@@ -28,9 +28,9 @@ spec:
         eks.amazonaws.com/role-arn: ${KARPENTER_IAM_ROLE_ARN} # Replace
     settings:
       aws:
-        clusterName: eks-upgrade-demo
+        clusterName: eks-upgrades-workshop
         clusterEndpoint: ${CLUSTER_ENDPOINT} # Replace
         defaultInstanceProfile: KarpenterNodeInstanceProfile-${CLUSTER_NAME} # Replace
-        interruptionQueueName: eks-upgrade-demo
+        # interruptionQueueName: eks-upgrade-demo
   install: {}
  
