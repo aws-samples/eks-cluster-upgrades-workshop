@@ -52,7 +52,7 @@ resource "aws_iam_instance_profile" "karpenter_instance_profile" {
 ################################################################################
 # Karpenter IRSA
 ################################################################################
-
+# TODO: Need to add more permissions to this role
 module "karpenter_irsa_role" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 

@@ -19,7 +19,7 @@ variable "git_branch" {
 }
 
 variable "git_password" {
-  default = ""
+    password = ""
 }
 
 variable "git_username" {

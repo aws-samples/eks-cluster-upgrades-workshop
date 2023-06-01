@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: cluster-upgrade-validate-workflow-new-2 # TODO: add IRSA to this service account
+  namespace: argo-workflows
+spec:
+  templates:
+    - name: validate-apis
+      container:
+        image: alpine:latest
+        command: ["/bin/sh","-c"]
+        args: ["apk update && apk add curl && curl -sSL https://git.io/install-kubent | sh && /usr/local/bin/kubent | tee /tmp/kubent-report.txt"]
+      # outputs:
+      #   artifacts:
+      #   # generate hello-art artifact from /tmp/hello_world.txt
+      #   # artifacts can be directories as well as files
+      #   - name: kubent-report
+      #     path: /tmp/kubent-report.txt
+    - name: validate-add-ons-self-managed
+      container:
+        image: alpine:latest
+        command: ["/bin/sh","-c"]
+        args: ['apk update && apk add curl && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && kubectl get helmreleases -nflux-system | tee /tmp/add-ons-versions.txt']
+      # outputs:
+      #   artifacts:
+      #   # generate hello-art artifact from /tmp/hello_world.txt
+      #   # artifacts can be directories as well as files
+      #   - name: self-managed-add-on-report
+      #     path: /tmp/add-ons-versions.txt
+    - name: validate-eks-managed-add-ons
+      container:
+        image: docker/whalesay:latest
+        command: [cowsay]
+        args: ["Validate EKS managed add-ons"]
+    - name: cluster-upgrade-validate
+      steps:
+        - - name: validate-apis
+            template: validate-apis
+        - - name: validate-add-ons-self-managed
+            template: validate-add-ons-self-managed
+        - - name: validate-eks-managed-add-ons
+            template: validate-eks-managed-add-ons
+  entrypoint: cluster-upgrade-validate
+  serviceAccountName: full-permissions-service-account

@@ -133,6 +133,11 @@ module "eks" {
         { namespace = "flux-system" }
       ]
     }
+    argo-workflows = {
+      selectors = [
+        { namespace = "argo-workflows" }
+      ]
+    }
   }
 
   tags = merge(local.tags, {
