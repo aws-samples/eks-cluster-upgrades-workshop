@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - metric-server-helm.yaml
   - karpenter-helm.yaml
+  - argo-workflows-helm.yaml
