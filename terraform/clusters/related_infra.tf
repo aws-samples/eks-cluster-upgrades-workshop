@@ -79,18 +79,37 @@ module "karpenter_irsa_role" {
   }
 }
 
+resource "aws_iam_policy" "karpenter-policy" {
+  name        = "karpenter-policy"
+  path        = "/"
+  description = "karpenter-policy"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+      }
+    ]
+  })
+}
+
 # TODO: Improve policy defined here, to a more specific one
-resource "aws_iam_policy_attachment" "karpenter_admin" {
+resource "aws_iam_policy_attachment" "karpenter_policy_attach" {
   name       = "karpenter-admin"
   roles      = [module.karpenter_irsa_role.iam_role_name]
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = aws_iam_policy.karpenter-policy.arn
   users = []
 
   lifecycle {
     ignore_changes = [
       # Ignore changes to tags, e.g. because a management agent
       # updates these based on some ruleset managed elsewhere.
-      policy_arn, roles, users
+      roles, users
     ]
   }
 }
