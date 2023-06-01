@@ -36,6 +36,13 @@ resource "aws_iam_policy_attachment" "amazon_eks_cni_policy" {
   name       = "KarpenterAmazonEKS_CNI_Policy"
   roles      = [aws_iam_role.karpenter_node_role.name]
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  lifecycle {
+    ignore_changes = [
+      # Ignore changes to tags, e.g. because a management agent
+      # updates these based on some ruleset managed elsewhere.
+      roles
+    ]
+  }
 }
 
 resource "aws_iam_policy_attachment" "amazon_eks_ssm_policy" {
@@ -52,7 +59,6 @@ resource "aws_iam_instance_profile" "karpenter_instance_profile" {
 ################################################################################
 # Karpenter IRSA
 ################################################################################
-# TODO: Need to add more permissions to this role
 module "karpenter_irsa_role" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
@@ -70,6 +76,22 @@ module "karpenter_irsa_role" {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["karpenter:karpenter"]
     }
+  }
+}
+
+# TODO: Improve policy defined here, to a more specific one
+resource "aws_iam_policy_attachment" "karpenter_admin" {
+  name       = "karpenter-admin"
+  roles      = [module.karpenter_irsa_role.iam_role_name]
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  users = []
+
+  lifecycle {
+    ignore_changes = [
+      # Ignore changes to tags, e.g. because a management agent
+      # updates these based on some ruleset managed elsewhere.
+      policy_arn, roles, users
+    ]
   }
 }
 
