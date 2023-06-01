@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: cluster-upgrade-validate-workflow # TODO: add IRSA to this service account
+  namespace: argo-workflows
+spec:
+  templates:
+    - name: validate-apis
+      container:
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:2
+        command: ["/bin/sh","-c"]
+        args: ['echo "====================== Kubent Deprecated APIs report ======================" > /tmp/kubent-report.txt && /usr/local/bin/kubent | tee -a /tmp/kubent-report.txt']
+      outputs:
+        artifacts:
+        # generate hello-art artifact from /tmp/hello_world.txt
+        # artifacts can be directories as well as files
+        - name: kubent-report
+          path: /tmp/kubent-report.txt
+    - name: validate-add-ons-self-managed
+      container:
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:2
+        command: ["/bin/sh","-c"]
+        args: ['echo "====================== Self Managed Add-ons ======================" > /tmp/self-addon-report.txt && kubectl get helmreleases -nflux-system | tee -a /tmp/self-addon-report.txt && echo "====================== Deprecated API in helm charts  ======================" >> /tmp/self-addon-report.txt && pluto detect-helm -o wide | tee -a /tmp/self-addon-report.txt']
+      outputs:
+        artifacts:
+        # generate hello-art artifact from /tmp/hello_world.txt
+        # artifacts can be directories as well as files
+        - name: self-managed-add-on-report
+          path: /tmp/self-addon-report.txt
+    - name: validate-eks-managed-add-ons
+      container:
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:2
+        command: ["/bin/sh","-c"]
+        args: ['echo "====================== Managed Add-ons report ======================" > /tmp/managed-addons.txt && eksctl get addons --cluster eks-upgrades-workshop --region us-east-2 | tee -a /tmp/managed-addons.txt'] # Change your region and cluster name
+      outputs:
+        artifacts:
+        # generate hello-art artifact from /tmp/hello_world.txt
+        # artifacts can be directories as well as files
+        - name: eks-managed-add-on-report
+          path: /tmp/managed-addons.txt
+    - name: cluster-upgrade-validate
+      steps:
+        - - name: validate-apis
+            template: validate-apis
+        - - name: validate-add-ons-self-managed
+            template: validate-add-ons-self-managed
+        - - name: validate-eks-managed-add-ons
+            template: validate-eks-managed-add-ons
+  entrypoint: cluster-upgrade-validate
+  serviceAccountName: full-permissions-service-account

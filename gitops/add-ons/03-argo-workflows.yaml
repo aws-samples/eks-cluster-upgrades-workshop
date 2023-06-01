@@ -18,6 +18,8 @@ kind: ServiceAccount
 metadata:
   name: full-permissions-service-account
   namespace: argo-workflows
+  annotations:
+    eks.amazonaws.com/role-arn: ${ARGO_WORKFLOWS_IAM_ROLE_ARN}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -39,7 +41,7 @@ metadata:
   name: argo-workflows
   namespace: flux-system
   labels:
-    self-managed-add-on: true
+    self-managed-add-on: "true"
     add-on-version: "0.28.2"
 spec:
   releaseName: argo-workflows
@@ -54,17 +56,27 @@ spec:
         kind: HelmRepository
         name: argo
   values:
+    useStaticCredentials: false
+    artifactRepository:
+      s3:
+        bucket: ${ARTIFACT_BUCKET_NAME}
+        region: ${AWS_REGION}
+        endpoint: s3.amazonaws.com
     workflow:
       serviceAccount:
         create: true
         name: "argo-workflow"
-        annotations: {} # Add IRSA for EKS add-on validate
+        annotations:
+          eks.amazonaws.com/role-arn: ${ARGO_WORKFLOWS_IAM_ROLE_ARN} # Add IRSA for EKS add-on validate
       rbac:
         create: true
     controller:
       workflowNamespaces: # Give permission to other namespaces, to use Karpenter
         - argo-workflows
     server:
+      serviceAccount:
+        annotations: 
+          eks.amazonaws.com/role-arn: ${ARGO_WORKFLOWS_IAM_ROLE_ARN}
       extraArgs:
       - --auth-mode=server # This is for demonstration purposes only
   install: {}

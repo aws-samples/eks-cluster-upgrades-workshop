@@ -35,3 +35,18 @@ output "karpenter_irsa" {
 output "karpenter_instance_profile" {
   value = aws_iam_instance_profile.karpenter_instance_profile.name
 }
+
+################################################################################
+# Argo Workflows
+################################################################################
+output "argo_workflows_irsa" {
+  value = module.argo_workflows_eks_role.iam_role_arn
+}
+
+output "argo_workflows_bucket_name" {
+  value = aws_s3_bucket.argo-artifacts.id
+}
+
+output "argo_workflows_bucket_arn" {
+  value = aws_s3_bucket.argo-artifacts.arn
+}

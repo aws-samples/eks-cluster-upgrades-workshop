@@ -72,3 +72,35 @@ module "karpenter_irsa_role" {
     }
   }
 }
+
+################################################################################
+# Argo Workflows needs
+################################################################################
+module "argo_workflows_eks_role" {
+  source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  role_name = "argo-workflows-irsa"
+
+  # TODO: Change to specific policy
+  role_policy_arns = {
+    policy = "arn:aws:iam::aws:policy/AdministratorAccess"
+  }
+
+  oidc_providers = {
+    one = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["argo-workflows:full-permissions-service-account", "argo-workflows:argo-workflows-server"]
+    }
+  }
+}
+
+
+resource "random_uuid" "uuid" {}
+
+# To store argo artifacts
+resource "aws_s3_bucket" "argo-artifacts" {
+  bucket = "my-tf-test-bucket-${random_uuid.uuid.result}"
+
+  tags = {
+    Blueprint  = var.name
+  }
+}
