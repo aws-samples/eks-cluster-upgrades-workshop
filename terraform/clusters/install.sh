@@ -1,5 +1,19 @@
 #!/bin/bash
+echo "Executing Terraform"
 
+terraform init
+
+terraform plan
+
+# TODO: add aws_region on terraform apply command
+terraform apply --auto-approve -var="git_password=$1" -var="git_username=$2" -var="git_url=$3" -var="git_branch=$4" -var="aws_region=$5" --auto-approve
+
+sleep 20
+# TODO: add aws_region on terraform apply command 
+terraform apply --auto-approve -var="git_password=$1" -var="git_username=$2" -var="git_url=$3" -var="git_branch=$4" -var="aws_region=$5" --auto-approve
+
+
+echo "Change needed variables on template"
 # Retrieve Terraform outputs and set them as environment variables
 argo_workflows_bucket_arn=$(terraform output -raw argo_workflows_bucket_arn)
 argo_workflows_bucket_name=$(terraform output -raw argo_workflows_bucket_name)
