@@ -1,5 +1,21 @@
 #!/bin/bash
 
+echo "Executing Terraform"
+
+terraform init
+
+terraform plan -var="git_password=$1" -var="git_username=$2" -var="git_url=$3" -var="git_branch=$4" -var="aws_region=$5"
+
+# TODO: add aws_region on terraform apply command
+terraform apply --auto-approve -var="git_password=$1" -var="git_username=$2" -var="git_url=$3" -var="git_branch=$4" -var="aws_region=$5" --auto-approve
+
+sleep 20
+# TODO: add aws_region on terraform apply command 
+terraform apply --auto-approve -var="git_password=$1" -var="git_username=$2" -var="git_url=$3" -var="git_branch=$4" -var="aws_region=$5" --auto-approve
+
+
+echo "Change needed variables on template"
+
 # Retrieve Terraform outputs and set them as environment variables
 argo_workflows_bucket_arn=$(terraform output -raw argo_workflows_bucket_arn)
 argo_workflows_bucket_name=$(terraform output -raw argo_workflows_bucket_name)
@@ -16,6 +32,8 @@ karpenter_irsa=$(terraform output -raw karpenter_irsa)
 karpenter_file="../../gitops/add-ons/02-karpenter.yaml"
 argo_workflows_file="../../gitops/add-ons/03-argo-workflows.yaml"
 upgrades_workflow_file="../../upgrades-workflows/03-upgrade-validate-workflow.yaml"
+
+deprecated_manifest_path="../../gitops/applications/deprecated-manifests"
 
 # Perform the replacements using sed (macOS)
 sed -i '' "s|ARGO_WORKFLOWS_BUCKET_ARN|$argo_workflows_bucket_arn|g" "$karpenter_file"
@@ -38,3 +56,6 @@ sed -i '' "s|AWS_VPC_ID|$aws_vpc_id|g" "$upgrades_workflow_file"
 sed -i '' "s|REGION_AWS|$aws_region|g" "$upgrades_workflow_file"
 sed -i '' "s|AWS_CLUSTER_IAM_ROLE_NAME|$cluster_iam_role_name|g" "$upgrades_workflow_file"
 sed -i '' "s|CLUSTER_SECURITY_GROUP_ID|$cluster_primary_security_group_id|g" "$upgrades_workflow_file"
+
+# Applying deprecated manifests
+kubectl apply -f $deprecated_manifest_path

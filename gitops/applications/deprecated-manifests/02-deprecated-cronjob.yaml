@@ -8,13 +8,13 @@ spec:
   jobTemplate:
     spec:
       template:
-        nodeSelector: # Force scale on Karpenter nodes
-          node-type: applications
-        tolerations: # Force scale on Karpenter nodes
-        - key: "applications"
-          operator: "Exists"
-          effect: "NoSchedule"
         spec:
+          nodeSelector: # Force scale on Karpenter nodes
+            node-type: applications
+          tolerations: # Force scale on Karpenter nodes
+            - key: "applications"
+              operator: "Exists"
+              effect: "NoSchedule"
           containers:
             - name: hello
               image: busybox:1.28

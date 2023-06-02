@@ -2,9 +2,7 @@ variable "name" {
   default = "eks-upgrades-workshop"
 }
 
-variable "aws_region" {
-  default = "us-east-2"
-}
+variable "aws_region" {} # Defined in script
 
 variable "vpc_cidr" {
   default = "10.35.0.0/16"
@@ -18,14 +16,8 @@ variable "git_branch" {
   default = "main"
 }
 
-# variable "git_password" {
-#   default = ""
-# }
+variable "git_password" {}
 
-# variable "git_username" {
-#   default = ""
-# }
+variable "git_username" {}
 
-# variable "git_url" {
-#   default = ""
-# }
+variable "git_url" {}
