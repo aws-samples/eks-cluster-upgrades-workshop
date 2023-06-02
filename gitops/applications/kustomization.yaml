@@ -2,6 +2,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - 01-sample-app.yaml
-  - 03-deprecated-hpa.yaml
-  - 02-deprecated-cronjob.yaml
   - 01-pdb-sample-app.yaml
+  # - deprecated-manifests
