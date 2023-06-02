@@ -1,7 +1,8 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: cluster-upgrade-validate-workflow-13
+  name: cluster-upgrade-validate-workflow
   namespace: argo-workflows
 spec:
   templates:
@@ -21,6 +22,10 @@ spec:
         command: ["/bin/sh","-c"]
         args: ['./validate-aws-basics.sh {{inputs.parameters.CLUSTER_IAM_ROLE_NAME}} {{inputs.parameters.VPC_ID}} {{inputs.parameters.CLUSTER_SG_ID}} {{inputs.parameters.AWS_REGION}}']
       outputs:
+        parameters:
+        - name: aws-basics
+          valueFrom:
+            path: /tmp/my_file.txt
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
         # artifacts can be directories as well as files
@@ -32,6 +37,10 @@ spec:
         command: ["/bin/sh","-c"]
         args: ['./validate-apis.sh']
       outputs:
+        parameters:
+        - name: kubent-report
+          valueFrom:
+            path: /tmp/kubent-report.txt
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
         # artifacts can be directories as well as files
@@ -43,6 +52,10 @@ spec:
         command: ["/bin/sh","-c"]
         args: ['./validate-self-managed-add-ons.sh']
       outputs:
+        parameters:
+        - name: self-managed-add-on-report
+          valueFrom:
+            path: /tmp/self-addon-report.txt
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
         # artifacts can be directories as well as files
@@ -60,6 +73,10 @@ spec:
         command: ["/bin/sh","-c"]
         args: ["./validate-managed-addons.sh {{inputs.parameters.AWS_REGION}} {{inputs.parameters.CLUSTER_NAME}} --validate-if-needs-to-upgrade"] # Change your region and cluster name
       outputs:
+        parameters:
+        - name: eks-managed-add-on-report
+          valueFrom:
+            path: /tmp/managed-addons.txt
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
         # artifacts can be directories as well as files
@@ -70,18 +87,38 @@ spec:
         parameters:
           - name: k8s_version
             value: "1.25"
-          - name: VPC_ID
-            value: "vpc-04a2856d6fddf5f4f"
       container:
         image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
         args: ['echo "====================== Must look URLs ======================" > /tmp/eks-k8s-docs.txt && echo "K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions={{inputs.parameters.k8s_version}}.0" >> /tmp/eks-k8s-docs.txt && echo "EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-{{inputs.parameters.k8s_version}}" >> /tmp/eks-k8s-docs.txt'] # Change your region and cluster name
       outputs:
+        parameters:
+        - name: notes
+          valueFrom:
+            path: /tmp/eks-k8s-docs.txt
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
         # artifacts can be directories as well as files
         - name: k8s-eks-notes
           path: /tmp/eks-k8s-docs.txt
+    - name: consolidate-report
+      inputs:
+        parameters:
+        - name: aws-basics
+        - name: kubent-report
+        - name: self-managed-add-on-report
+        - name: eks-managed-add-on-report
+        - name: k8s-eks-notes
+      container:
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
+        command: ["/bin/sh","-c"]
+        args: ["echo '{{inputs.parameters.aws-basics}} \n {{inputs.parameters.kubent-report}} \n {{inputs.parameters.self-managed-add-on-report}} \n {{inputs.parameters.eks-managed-add-on-report}} \n {{inputs.parameters.k8s-eks-notes}}' > /tmp/full-report.txt"]
+      outputs:
+        artifacts:
+        # generate hello-art artifact from /tmp/hello_world.txt
+        # artifacts can be directories as well as files
+        - name: full-report
+          path: /tmp/full-report.txt
     - name: cluster-upgrade-validate
       steps:
         - - name: validate-aws-basics
@@ -94,6 +131,21 @@ spec:
             template: validate-eks-managed-add-ons
         - - name: get-eks-k8s-documentation
             template: get-eks-k8s-documentation
+        - - name: consolidate-report
+            template: consolidate-report
+            arguments:
+              parameters:
+              # Pass the hello-param output from the generate-parameter step as the message input to print-message
+              - name: aws-basics
+                value: "{{steps.validate-aws-basics.outputs.parameters.aws-basics}}"
+              - name: kubent-report
+                value: "{{steps.validate-apis.outputs.parameters.kubent-report}}"
+              - name: self-managed-add-on-report
+                value: "{{steps.validate-add-ons-self-managed.outputs.parameters.self-managed-add-on-report}}"
+              - name: eks-managed-add-on-report
+                value: "{{steps.validate-eks-managed-add-ons.outputs.parameters.eks-managed-add-on-report}}"
+              - name: k8s-eks-notes
+                value: "{{steps.get-eks-k8s-documentation.outputs.parameters.notes}}"
   entrypoint: cluster-upgrade-validate
   serviceAccountName: full-permissions-service-account
   arguments:
