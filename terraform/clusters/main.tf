@@ -56,8 +56,11 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   cluster_addons = {
-    aws-ebs-csi-driver = {}
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
     coredns = {
+      most_recent = true
       configuration_values = jsonencode({
         computeType = "Fargate"
         # Ensure that the we fully utilize the minimum amount of resources that are supplied by
@@ -82,7 +85,9 @@ module "eks" {
         }
       })
     }
-    kube-proxy = {}
+    kube-proxy = {
+      most_recent = true
+    }
     vpc-cni = {
       most_recent    = true
       before_compute = true
