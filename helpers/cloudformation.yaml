@@ -327,7 +327,7 @@ Resources:
             - curl --silent --location "https://github.com/FairwindsOps/pluto/releases/download/v5.16.1/pluto_5.16.1_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             - mv /tmp/pluto /usr/local/bin
             - echo '=== INSTALL KUBENT ==='
-            - curl -sSL https://git.io/install-kubent | sh
+            - wget https://git.io/install-kubent && chmod +x install-kubent && ./install-kubent
             - echo '=== INSTALL kubectl convert plugin ==='
             - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl-convert"
             - sudo install -o root -g root -m 0755 kubectl-convert /usr/local/bin/kubectl-convert
