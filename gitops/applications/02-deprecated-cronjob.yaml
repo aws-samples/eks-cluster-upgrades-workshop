@@ -8,6 +8,12 @@ spec:
   jobTemplate:
     spec:
       template:
+        nodeSelector: # Force scale on Karpenter nodes
+          node-type: applications
+        tolerations: # Force scale on Karpenter nodes
+        - key: "applications"
+          operator: "Exists"
+          effect: "NoSchedule"
         spec:
           containers:
             - name: hello
