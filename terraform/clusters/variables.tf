@@ -18,14 +18,14 @@ variable "git_branch" {
   default = "main"
 }
 
-variable "git_password" {
-  default = ""
-}
+# variable "git_password" {
+#   default = ""
+# }
 
-variable "git_username" {
-  default = ""
-}
+# variable "git_username" {
+#   default = ""
+# }
 
-variable "git_url" {
-  default = ""
-}
+# variable "git_url" {
+#   default = ""
+# }

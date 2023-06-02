@@ -19,7 +19,7 @@ metadata:
   name: full-permissions-service-account
   namespace: argo-workflows
   annotations:
-    eks.amazonaws.com/role-arn: ${argo_workflows_irsa}
+    eks.amazonaws.com/role-arn: ARGO_WORKFLOWS_IRSA
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -59,15 +59,15 @@ spec:
     useStaticCredentials: false
     artifactRepository:
       s3:
-        bucket: ${argo_workflows_bucket_name}
-        region: ${aws_region}
+        bucket: ARGO_WORKFLOWS_BUCKET_NAME
+        region: AWS_REGION
         endpoint: s3.amazonaws.com
     workflow:
       serviceAccount:
         create: true
         name: "argo-workflow"
         annotations:
-          eks.amazonaws.com/role-arn: ${argo_workflows_irsa} # Add IRSA for EKS add-on validate
+          eks.amazonaws.com/role-arn: ARGO_WORKFLOWS_IRSA # Add IRSA for EKS add-on validate
       rbac:
         create: true
     controller:
@@ -76,7 +76,7 @@ spec:
     server:
       serviceAccount:
         annotations: 
-          eks.amazonaws.com/role-arn: ${argo_workflows_irsa}
+          eks.amazonaws.com/role-arn: ARGO_WORKFLOWS_IRSA
       extraArgs:
       - --auth-mode=server # This is for demonstration purposes only
   install: {}
