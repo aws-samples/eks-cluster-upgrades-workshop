@@ -74,6 +74,7 @@ spec:
       workflowNamespaces: # Give permission to other namespaces, to use Karpenter
         - argo-workflows
     server:
+      serviceType: LoadBalancer
       serviceAccount:
         annotations: 
           eks.amazonaws.com/role-arn: ARGO_WORKFLOWS_IRSA
