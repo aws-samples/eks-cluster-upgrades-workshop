@@ -335,7 +335,7 @@ Resources:
             - yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
             - yum -y install terraform
             - echo '=== Exporting ENV Vars ==='
-            - export CLUSTER_NAME=eks-upgrade-demo && echo 'export CLUSTER_NAME=eks-upgrade-demo' >> /home/ec2-user/.bashrc
+            - export CLUSTER_NAME=eks-upgrades-workshop && echo 'export CLUSTER_NAME=eks-upgrades-workshop' >> /home/ec2-user/.bashrc
             - export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)" && echo "export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" >> /home/ec2-user/.bashrc
             - export AWS_REGION="$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f4)" && echo "export AWS_REGION=${AWS_REGION}" >> /home/ec2-user/.bashrc
             - export K8S_CURRENT_VERSION=1.23 && echo "export K8S_CURRENT_VERSION=${K8S_CURRENT_VERSION}" >> /home/ec2-user/.bashrc
