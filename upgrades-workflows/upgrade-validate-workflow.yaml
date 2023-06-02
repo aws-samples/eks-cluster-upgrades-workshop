@@ -17,7 +17,7 @@ spec:
           - name: CLUSTER_SG_ID
             value: CLUSTER_SECURITY_GROUP_ID
       container:
-        image: public.ecr.aws/i9m4f0j6/eks-validate-image:5
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
         args: ['./validate-aws-basics.sh {{inputs.parameters.CLUSTER_IAM_ROLE_NAME}} {{inputs.parameters.VPC_ID}} {{inputs.parameters.CLUSTER_SG_ID}} {{inputs.parameters.AWS_REGION}}']
       outputs:
@@ -28,9 +28,9 @@ spec:
           path: /tmp/my_file.txt
     - name: validate-apis
       container:
-        image: public.ecr.aws/i9m4f0j6/eks-validate-image:5
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
-        args: ['echo "====================== Kubent Deprecated APIs report ======================" > /tmp/kubent-report.txt && /usr/local/bin/kubent | tee -a /tmp/kubent-report.txt']
+        args: ['./validate-apis.sh']
       outputs:
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
@@ -39,9 +39,9 @@ spec:
           path: /tmp/kubent-report.txt
     - name: validate-add-ons-self-managed
       container:
-        image: public.ecr.aws/i9m4f0j6/eks-validate-image:5
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
-        args: ['echo "====================== Self Managed Add-ons ======================" > /tmp/self-addon-report.txt && kubectl get helmreleases -nflux-system | tee -a /tmp/self-addon-report.txt && echo "====================== Deprecated API in helm charts  ======================" >> /tmp/self-addon-report.txt && pluto detect-helm -o wide | tee -a /tmp/self-addon-report.txt']
+        args: ['./validate-self-managed-add-ons.sh']
       outputs:
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
@@ -49,10 +49,16 @@ spec:
         - name: self-managed-add-on-report
           path: /tmp/self-addon-report.txt
     - name: validate-eks-managed-add-ons
+      inputs:
+        parameters:
+          - name: CLUSTER_NAME
+            value: eks-upgrades-workshop
+          - name: AWS_REGION
+            value: REGION_AWS
       container:
-        image: public.ecr.aws/i9m4f0j6/eks-validate-image:5
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
-        args: ['echo "====================== Managed Add-ons report ======================" > /tmp/managed-addons.txt && eksctl get addons --cluster eks-upgrades-workshop --region us-east-2 | tee -a /tmp/managed-addons.txt'] # Change your region and cluster name
+        args: ["./validate-managed-addons.sh {{inputs.parameters.AWS_REGION}} {{inputs.parameters.CLUSTER_NAME}} --validate-if-needs-to-upgrade"] # Change your region and cluster name
       outputs:
         artifacts:
         # generate hello-art artifact from /tmp/hello_world.txt
@@ -67,7 +73,7 @@ spec:
           - name: VPC_ID
             value: "vpc-04a2856d6fddf5f4f"
       container:
-        image: public.ecr.aws/i9m4f0j6/eks-validate-image:5
+        image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
         args: ['echo "====================== Must look URLs ======================" > /tmp/eks-k8s-docs.txt && echo "K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions={{inputs.parameters.k8s_version}}.0" >> /tmp/eks-k8s-docs.txt && echo "EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-{{inputs.parameters.k8s_version}}" >> /tmp/eks-k8s-docs.txt'] # Change your region and cluster name
       outputs:

@@ -27,7 +27,8 @@ else
   sg_check="Cluster security group does not exist"
 fi
 
+echo "========================== AWS BASICS VALIDATION ==========================" > /tmp/my_file.txt
 # Persist the checks in the file
-echo "Subnet Check: ${subnet_check}" > /tmp/my_file.txt
+echo "Subnet Check: ${subnet_check}" >> /tmp/my_file.txt
 echo "Role Check: ${role_check}" >> /tmp/my_file.txt
 echo "Security Group Check: ${sg_check}" >> /tmp/my_file.txt
