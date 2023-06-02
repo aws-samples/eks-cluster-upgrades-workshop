@@ -13,6 +13,7 @@ sleep 20
 # TODO: add aws_region on terraform apply command 
 terraform apply --auto-approve -var="git_password=$1" -var="git_username=$2" -var="git_url=$3" -var="git_branch=$4" -var="aws_region=$5" --auto-approve
 
+aws eks --region $5 update-kubeconfig --name eks-upgrades-workshop
 
 echo "Change needed variables on template"
 

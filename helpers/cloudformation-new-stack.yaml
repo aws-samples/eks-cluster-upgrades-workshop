@@ -722,6 +722,7 @@ Resources:
             - cd /home/ec2-user/environment/eks-blueprint && terraform init && terraform apply --auto-approve
             - cd /home/ec2-user/environment/eks-blueprint && terraform apply --auto-approve
             - cp /home/ec2-user/environment/eks-blueprint/terraform.tfstate /home/ec2-user/environment/
+            - chown ec2-user:ec2-user /home/ec2-user/environment/terraform.tfstate
             - echo "Bootstrap completed with return code $?"
             - shutdown -r +1
 
