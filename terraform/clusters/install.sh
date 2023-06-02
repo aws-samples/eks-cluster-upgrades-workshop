@@ -31,7 +31,7 @@ karpenter_irsa=$(terraform output -raw karpenter_irsa)
 # Define the file paths
 karpenter_file="../../gitops/add-ons/02-karpenter.yaml"
 argo_workflows_file="../../gitops/add-ons/03-argo-workflows.yaml"
-upgrades_workflow_file="../../upgrades-workflows/03-upgrade-validate-workflow.yaml"
+upgrades_workflow_file="../../upgrades-workflows/upgrade-validate-workflow.yaml"
 
 deprecated_manifest_path="../../gitops/applications/deprecated-manifests"
 
