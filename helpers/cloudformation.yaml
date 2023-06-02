@@ -326,6 +326,8 @@ Resources:
             - echo '=== INSTALL PLUTO ==='
             - curl --silent --location "https://github.com/FairwindsOps/pluto/releases/download/v5.16.1/pluto_5.16.1_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             - mv /tmp/pluto /usr/local/bin
+            - echo '=== INSTALL KUBENT ==='
+            - curl -sSL https://git.io/install-kubent | sh
             - echo '=== INSTALL kubectl convert plugin ==='
             - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl-convert"
             - sudo install -o root -g root -m 0755 kubectl-convert /usr/local/bin/kubectl-convert
@@ -339,17 +341,6 @@ Resources:
             - export K8S_CURRENT_VERSION=1.23 && echo "export K8S_CURRENT_VERSION=${K8S_CURRENT_VERSION}" >> /home/ec2-user/.bashrc
             - export K8S_TARGET_VERSION=1.24 && echo "export K8S_TARGET_VERSION=${K8S_TARGET_VERSION}" >> /home/ec2-user/.bashrc
             - echo 'aws cloud9 update-environment  --environment-id $C9_PID --managed-credentials-action DISABLE' >> /home/ec2-user/.bashrc
-            - echo "=== CREATING KARPENTER  ==="
-            - export KARPENTER_VERSION=v0.27.3 && echo "export KARPENTER_VERSION=v0.27.3" >> /home/ec2-user/.bashrc
-            - |
-                TEMPOUT=$(mktemp)
-                curl -fsSL https://karpenter.sh/"${KARPENTER_VERSION}"/getting-started/getting-started-with-karpenter/cloudformation.yaml  > $TEMPOUT \
-                && aws cloudformation deploy \
-                  --stack-name "Karpenter-${CLUSTER_NAME}" \
-                  --template-file "${TEMPOUT}" \
-                  --capabilities CAPABILITY_NAMED_IAM \
-                  --parameter-overrides "ClusterName=${CLUSTER_NAME}"
-                export KARPENTER_IAM_ROLE_ARN="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${CLUSTER_NAME}-karpenter" && echo "export KARPENTER_IAM_ROLE_ARN=${KARPENTER_IAM_ROLE_ARN}" >> /home/ec2-user/.bashrc
             - echo "Bootstrap completed with return code $?"
             - shutdown -r +1
 
