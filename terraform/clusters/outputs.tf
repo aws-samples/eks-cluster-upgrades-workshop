@@ -1,10 +1,16 @@
 ################################################################################
+# VPC
+################################################################################
+output "aws_vpc_id" {
+  value = module.vpc.vpc_id
+}
+
+################################################################################
 # Cluster
 ################################################################################
-# output "cluster_arn" {
-#   description = "The Amazon Resource Name (ARN) of the cluster"
-#   value       = module.eks.cluster_arn
-# }
+output "cluster_iam_role_name" {
+  value = module.eks.cluster_iam_role_name
+}
 
 output "cluster_name" {
   description = "The Amazon Resource Name (ARN) of the cluster, use"
@@ -15,15 +21,9 @@ output "cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
 
-# output "oidc_provider" {
-#   description = "The OIDC Provider"
-#   value       = module.eks.cluster_oidc_issuer_url
-# }
-
-# output "oidc_provider_arn" {
-#   description = "The ARN of the OIDC Provider"
-#   value       = module.eks.oidc_provider_arn
-# }
+output "cluster_primary_security_group_id" {
+  value = module.eks.cluster_primary_security_group_id
+}
 
 ################################################################################
 # Karpenter

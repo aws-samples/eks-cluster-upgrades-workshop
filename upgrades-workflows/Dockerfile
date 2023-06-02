@@ -10,4 +10,8 @@ RUN ARCH=amd64 \
     && curl --silent --location "https://github.com/FairwindsOps/pluto/releases/download/v5.16.1/pluto_5.16.1_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp \
     && mv /tmp/pluto /usr/local/bin \
     && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
-    && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
+    && apk add aws-cli
+
+COPY ./validate-aws-basics.sh /
+RUN chmod +x /validate-aws-basics.sh
