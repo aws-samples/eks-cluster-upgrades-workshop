@@ -129,28 +129,45 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     echo "Change needed variables on template"
 
     # Retrieve Terraform outputs and set them as environment variables
-    declare -A replacements=(
-        ["ARGO_WORKFLOWS_BUCKET_ARN"]=$(terraform output -raw argo_workflows_bucket_arn)
-        ["ARGO_WORKFLOWS_BUCKET_NAME"]=$(terraform output -raw argo_workflows_bucket_name)
-        ["ARGO_WORKFLOWS_IRSA"]=$(terraform output -raw argo_workflows_irsa)
-        ["AWS_REGION"]=$(terraform output -raw aws_region)
-        ["AWS_VPC_ID"]=$(terraform output -raw aws_vpc_id)
-        ["CLUSTER_ENDPOINT"]=$(terraform output -raw cluster_endpoint)
-        ["CLUSTER_IAM_ROLE_NAME"]=$(terraform output -raw cluster_iam_role_name)
-        ["CLUSTER_SECURITY_GROUP_ID"]=$(terraform output -raw cluster_primary_security_group_id)
-        ["KARPENTER_INSTANCE_PROFILE"]=$(terraform output -raw karpenter_instance_profile)
-        ["KARPENTER_IRSA"]=$(terraform output -raw karpenter_irsa)
-    )
-
+    
+    ARGO_WORKFLOWS_BUCKET_ARN=$(terraform output -raw argo_workflows_bucket_arn)
+    ARGO_WORKFLOWS_BUCKET_NAME=$(terraform output -raw argo_workflows_bucket_name)
+    ARGO_WORKFLOWS_IRSA=$(terraform output -raw argo_workflows_irsa)
+    AWS_REGION=$(terraform output -raw aws_region)
+    AWS_VPC_ID=$(terraform output -raw aws_vpc_id)
+    CLUSTER_ENDPOINT=$(terraform output -raw cluster_endpoint)
+    CLUSTER_IAM_ROLE_NAME=$(terraform output -raw cluster_iam_role_name)
+    CLUSTER_SECURITY_GROUP_ID=$(terraform output -raw cluster_primary_security_group_id)
+    KARPENTER_INSTANCE_PROFILE=$(terraform output -raw karpenter_instance_profile)
+    KARPENTER_IRSA=$(terraform output -raw karpenter_irsa)
+    
+    pwd
     # Define the file paths
     karpenter_file="../../gitops/add-ons/02-karpenter.yaml"
     argo_workflows_file="../../gitops/add-ons/03-argo-workflows.yaml"
     upgrades_workflow_file="../../upgrades-workflows/upgrade-validate-workflow.yaml"
 
-    # Perform variable replacements in files
-    replace_variables "$karpenter_file" "$replacements"
-    replace_variables "$argo_workflows_file" "$replacements"
-    replace_variables "$upgrades_workflow_file" "$replacements"
+    # Perform the replacements using sed (macOS)
+    sed -i'' -e "s|ARGO_WORKFLOWS_BUCKET_ARN|$ARGO_WORKFLOWS_BUCKET_ARN|g" "$karpenter_file"
+    sed -i'' -e "s|ARGO_WORKFLOWS_BUCKET_NAME|$ARGO_WORKFLOWS_BUCKET_NAME|g" "$karpenter_file"
+    sed -i'' -e "s|ARGO_WORKFLOWS_IRSA|$ARGO_WORKFLOWS_IRSA|g" "$karpenter_file"
+    sed -i'' -e "s|CLUSTER_ENDPOINT|$CLUSTER_ENDPOINT|g" "$karpenter_file"
+    sed -i'' -e "s|KARPENTER_INSTANCE_PROFILE|$KARPENTER_INSTANCE_PROFILE|g" "$karpenter_file"
+    sed -i'' -e "s|KARPENTER_IRSA|$KARPENTER_IRSA|g" "$karpenter_file"
+    sed -i'' -e "s|AWS_REGION|$AWS_REGION|g" "$karpenter_file"
+    
+    sed -i'' -e "s|ARGO_WORKFLOWS_BUCKET_ARN|$ARGO_WORKFLOWS_BUCKET_ARN|g" "$argo_workflows_file"
+    sed -i'' -e "s|ARGO_WORKFLOWS_BUCKET_NAME|$ARGO_WORKFLOWS_BUCKET_NAME|g" "$argo_workflows_file"
+    sed -i'' -e "s|ARGO_WORKFLOWS_IRSA|$ARGO_WORKFLOWS_IRSA|g" "$argo_workflows_file"
+    sed -i'' -e "s|CLUSTER_ENDPOINT|$CLUSTER_ENDPOINT|g" "$argo_workflows_file"
+    sed -i'' -e "s|KARPENTER_INSTANCE_PROFILE|$KARPENTER_INSTANCE_PROFILE|g" "$argo_workflows_file"
+    sed -i'' -e "s|KARPENTER_IRSA|$KARPENTER_IRSA|g" "$argo_workflows_file"
+    sed -i'' -e "s|AWS_REGION|$AWS_REGION|g" "$argo_workflows_file"
+    
+    sed -i'' -e "s|AWS_VPC_ID|$AWS_VPC_ID|g" "$upgrades_workflow_file"
+    sed -i'' -e "s|REGION_AWS|$AWS_REGION|g" "$upgrades_workflow_file"
+    sed -i'' -e "s|AWS_CLUSTER_IAM_ROLE_NAME|$CLUSTER_IAM_ROLE_NAME|g" "$upgrades_workflow_file"
+    sed -i'' -e "s|CLUSTER_SECURITY_GROUP_ID|$CLUSTER_SECURITY_GROUP_ID|g" "$upgrades_workflow_file"
 
     # Applying deprecated manifests
     kubectl apply -f ../../gitops/applications/deprecated-manifests
