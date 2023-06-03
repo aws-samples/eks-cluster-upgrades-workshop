@@ -723,6 +723,8 @@ Resources:
             - cd /home/ec2-user/environment/eks-blueprint && terraform apply --auto-approve
             - cp /home/ec2-user/environment/eks-blueprint/terraform.tfstate /home/ec2-user/environment/
             - chown ec2-user:ec2-user /home/ec2-user/environment/terraform.tfstate
+            - curl -o /home/ec2-user/environment/install.sh https://raw.githubusercontent.com/aws-samples/eks-cluster-upgrades-workshop/feat/workshop_v2/install.sh
+            - chown ec2-user:ec2-user /home/ec2-user/environment/install.sh
             - echo "Bootstrap completed with return code $?"
             - shutdown -r +1
 
