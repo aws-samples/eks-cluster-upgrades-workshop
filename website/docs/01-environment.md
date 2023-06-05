@@ -1,0 +1,26 @@
+---
+id: env
+sidebar_label: 'Environment'
+sidebar_position: 1
+---
+
+# Selecting your environment
+
+This workshop can run in two different ways:
+
+- `AWS Event`: All the resources are already deployed as part of the event, including the `Amazon EKS Cluster` along with all networking resources and permissions, you can proceed to Accessing Cloud9 IDE.
+- `Self`: You will need to deploy the Cloudformation template in order to deploy the environment.
+
+## Creating the environment, self event
+
+In order to properly start the environment you will need to deploy the following Cloudformation template, this can be done, either via console or terminal:
+
+[EKS Upgrades Workshop CF](../../static/scripts/cloudformation.yaml)
+
+Give the name, `eks-upgrades-workshop` to you stack
+
+The above Cloudformation script will provision a `Cloud9` with all the required tools in order to execute the workshop along with `AWS VPC`, `Amazon EKS Cluster`, `IAM roles and permissions`, `Install Flux V2`.
+
+:::tip
+Wai at least `20 minutes` before move on, this will give time to Cloudformation and SSM finishes its deploy. Might be a good time for a break.
+:::

@@ -48,6 +48,7 @@ Your IDE comes pre-configured to access the workshop EKS cluster and also provid
 kubectl version
 pluto version
 eksctl version
+kubent version
 aws --version
 ```
 
