@@ -30,6 +30,9 @@ Parameters:
     Type: String
     Description: The Arn of the Cloud9 Owner to be set if 3rdParty deployment.
     Default: ""
+  LatestAmiId:
+    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -47,7 +50,7 @@ Conditions:
   CreateEventEngineResources: !Equals [ !Ref C9EnvType, event-engine ]
 
 Resources:
-######## Cloud9 ########
+################## PERMISSIONS AND ROLES #################
   C9Role:
     Type: AWS::IAM::Role
     Properties:
@@ -83,7 +86,6 @@ Resources:
             Action:
             - cloud9:UpdateEnvironment
             Resource: "*"
-
   C9LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -142,6 +144,9 @@ Resources:
               Fn::GetAtt:
                 - C9Role
                 - Arn
+
+################## LAMBDA BOOTSTRAP FUNCTION ################
+
   C9BootstrapInstanceLambda:
     Type: Custom::C9BootstrapInstanceLambda
     DependsOn:
@@ -239,7 +244,7 @@ Resources:
                       responseData = {'Error': traceback.format_exc(e)}
                   finally:
                       cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-################## SSM BOOTSRAP HANDLER ###############
+################## ARTIFACTS BUCKET ###############
   C9OutputBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
@@ -277,6 +282,7 @@ Resources:
                 Fn::GetAtt:
                 - C9LambdaExecutionRole
                 - Arn
+################## SSM Bootstrap for Cloud9 ##################
   C9SSMDocument: 
     Type: AWS::SSM::Document
     Properties: 
@@ -284,7 +290,7 @@ Resources:
         - Key: Environment
           Value: !Sub ${EnvironmentNameC9}
       DocumentType: Command
-      Content: 
+      Content:
         schemaVersion: '2.2'
         description: Bootstrap Cloud9 Instance
         mainSteps:
@@ -326,6 +332,9 @@ Resources:
             - echo '=== INSTALL PLUTO ==='
             - curl --silent --location "https://github.com/FairwindsOps/pluto/releases/download/v5.16.1/pluto_5.16.1_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             - mv /tmp/pluto /usr/local/bin
+            - echo '=== INSTALL KUBENT ==='
+            - curl --silent --location "https://github.com/doitintl/kube-no-trouble/releases/download/0.7.0/kubent-0.7.0-$(uname -s)-amd64.tar.gz" | tar xz -C /tmp
+            - mv /tmp/kubent /usr/local/bin
             - echo '=== INSTALL kubectl convert plugin ==='
             - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl-convert"
             - sudo install -o root -g root -m 0755 kubectl-convert /usr/local/bin/kubectl-convert
@@ -333,23 +342,389 @@ Resources:
             - yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
             - yum -y install terraform
             - echo '=== Exporting ENV Vars ==='
-            - export CLUSTER_NAME=eks-upgrade-demo && echo 'export CLUSTER_NAME=eks-upgrade-demo' >> /home/ec2-user/.bashrc
+            - export CLUSTER_NAME=eks-upgrades-workshop && echo 'export CLUSTER_NAME=eks-upgrades-workshop' >> /home/ec2-user/.bashrc
             - export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)" && echo "export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" >> /home/ec2-user/.bashrc
             - export AWS_REGION="$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f4)" && echo "export AWS_REGION=${AWS_REGION}" >> /home/ec2-user/.bashrc
             - export K8S_CURRENT_VERSION=1.23 && echo "export K8S_CURRENT_VERSION=${K8S_CURRENT_VERSION}" >> /home/ec2-user/.bashrc
             - export K8S_TARGET_VERSION=1.24 && echo "export K8S_TARGET_VERSION=${K8S_TARGET_VERSION}" >> /home/ec2-user/.bashrc
             - echo 'aws cloud9 update-environment  --environment-id $C9_PID --managed-credentials-action DISABLE' >> /home/ec2-user/.bashrc
-            - echo "=== CREATING KARPENTER  ==="
-            - export KARPENTER_VERSION=v0.27.3 && echo "export KARPENTER_VERSION=v0.27.3" >> /home/ec2-user/.bashrc
+            - echo '====== Provision Terraform ======'
+            - mkdir -p /home/ec2-user/environment/eks-blueprint
             - |
-                TEMPOUT=$(mktemp)
-                curl -fsSL https://karpenter.sh/"${KARPENTER_VERSION}"/getting-started/getting-started-with-karpenter/cloudformation.yaml  > $TEMPOUT \
-                && aws cloudformation deploy \
-                  --stack-name "Karpenter-${CLUSTER_NAME}" \
-                  --template-file "${TEMPOUT}" \
-                  --capabilities CAPABILITY_NAMED_IAM \
-                  --parameter-overrides "ClusterName=${CLUSTER_NAME}"
-                export KARPENTER_IAM_ROLE_ARN="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${CLUSTER_NAME}-karpenter" && echo "export KARPENTER_IAM_ROLE_ARN=${KARPENTER_IAM_ROLE_ARN}" >> /home/ec2-user/.bashrc
+                cat >  /home/ec2-user/environment/eks-blueprint/providers.tf <<EOF
+                  provider "aws" {}
+                  provider "kubernetes" {
+                    host                   = module.eks.cluster_endpoint
+                    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+                    token                  = data.aws_eks_cluster_auth.this.token
+                  }
+                EOF
+            - |
+                cat > /home/ec2-user/environment/eks-blueprint/data.tf << EOF
+                  data "aws_eks_cluster_auth" "this" {
+                    name = module.eks.cluster_name
+                  }
+                  data "aws_availability_zones" "available" {}
+                  data "aws_region" "current" {}
+                EOF
+            - |
+                cat > /home/ec2-user/environment/eks-blueprint/outputs.tf <<EOF
+                  ################################################################################
+                  # VPC
+                  ################################################################################
+                  output "aws_vpc_id" {
+                    value = module.vpc.vpc_id
+                  }
+
+                  ################################################################################
+                  # Cluster
+                  ################################################################################
+                  output "cluster_iam_role_name" {
+                    value = module.eks.cluster_iam_role_name
+                  }
+
+                  output "cluster_name" {
+                    description = "The Amazon Resource Name (ARN) of the cluster, use"
+                    value       = module.eks.cluster_id
+                  }
+
+                  output "cluster_endpoint" {
+                    value = module.eks.cluster_endpoint
+                  }
+
+                  output "cluster_primary_security_group_id" {
+                    value = module.eks.cluster_primary_security_group_id
+                  }
+
+                  ################################################################################
+                  # Karpenter
+                  ################################################################################
+                  output "karpenter_irsa" {
+                    value = module.karpenter_irsa_role.iam_role_arn
+                  }
+
+                  output "karpenter_instance_profile" {
+                    value = aws_iam_instance_profile.karpenter_instance_profile.name
+                  }
+
+                  ################################################################################
+                  # Argo Workflows
+                  ################################################################################
+                  output "argo_workflows_irsa" {
+                    value = module.argo_workflows_eks_role.iam_role_arn
+                  }
+
+                  output "argo_workflows_bucket_name" {
+                    value = aws_s3_bucket.argo-artifacts.id
+                  }
+
+                  output "argo_workflows_bucket_arn" {
+                    value = aws_s3_bucket.argo-artifacts.arn
+                  }
+                EOF
+            - |
+                cat > /home/ec2-user/environment/eks-blueprint/related_infra.tf <<EOF
+                  ################################################################################
+                  # Karpenter Role to use in nodes created by Karpenter
+                  ################################################################################
+
+                  resource "aws_iam_role" "karpenter_node_role" {
+                    name = "KarpenterNodeRole-\${local.name}"
+                    assume_role_policy = <<EOF
+                  {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Principal": {
+                          "Service": "ec2.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                      }
+                    ]
+                  }
+                  EOF
+                  }
+
+                  resource "aws_iam_policy_attachment" "container_registry_policy" {
+                    name       = "KarpenterAmazonEC2ContainerRegistryReadOnly"
+                    roles      = [aws_iam_role.karpenter_node_role.name]
+                    policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+                  }
+
+                  resource "aws_iam_policy_attachment" "amazon_eks_worker_node_policy" {
+                    name       = "KarpenterAmazonEKSWorkerNodePolicy"
+                    roles      = [aws_iam_role.karpenter_node_role.name]
+                    policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+                  }
+
+                  resource "aws_iam_policy_attachment" "amazon_eks_cni_policy" {
+                    name       = "KarpenterAmazonEKS_CNI_Policy"
+                    roles      = [aws_iam_role.karpenter_node_role.name]
+                    policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+                    lifecycle {
+                      ignore_changes = [
+                        # Ignore changes to tags, e.g. because a management agent
+                        # updates these based on some ruleset managed elsewhere.
+                        roles
+                      ]
+                    }
+                  }
+
+                  resource "aws_iam_policy_attachment" "amazon_eks_ssm_policy" {
+                    name       = "KarpenterAmazonSSMManagedInstanceCore"
+                    roles      = [aws_iam_role.karpenter_node_role.name]
+                    policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+                  }
+
+                  resource "aws_iam_instance_profile" "karpenter_instance_profile" {
+                    name = "KarpenterNodeInstanceProfile-\${local.name}"
+                    role = aws_iam_role.karpenter_node_role.name
+                  }
+
+                  ################################################################################
+                  # Karpenter IRSA
+                  ################################################################################
+                  module "karpenter_irsa_role" {
+                    source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+                    role_name                          = "karpenter_controller"
+                    attach_karpenter_controller_policy = true
+
+                    karpenter_controller_cluster_name         = module.eks.cluster_name
+                    karpenter_controller_node_iam_role_arns = [aws_iam_role.karpenter_node_role.arn]
+
+                    attach_vpc_cni_policy = true
+                    vpc_cni_enable_ipv4   = true
+
+                    oidc_providers = {
+                      main = {
+                        provider_arn               = module.eks.oidc_provider_arn
+                        namespace_service_accounts = ["karpenter:karpenter"]
+                      }
+                    }
+                  }
+
+                  resource "aws_iam_policy" "karpenter-policy" {
+                    name        = "karpenter-policy"
+                    path        = "/"
+                    description = "karpenter-policy"
+
+                    # Terraform's "jsonencode" function converts a
+                    # Terraform expression result to valid JSON syntax.
+                    policy = jsonencode({
+                      Version = "2012-10-17"
+                      Statement = [
+                        {
+                              "Effect": "Allow",
+                              "Action": "*",
+                              "Resource": "*"
+                        }
+                      ]
+                    })
+                  }
+
+                  # TODO: Improve policy defined here, to a more specific one
+                  resource "aws_iam_policy_attachment" "karpenter_policy_attach" {
+                    name       = "karpenter-admin"
+                    roles      = [module.karpenter_irsa_role.iam_role_name]
+                    policy_arn = aws_iam_policy.karpenter-policy.arn
+                    users = []
+
+                    lifecycle {
+                      ignore_changes = [
+                        # Ignore changes to tags, e.g. because a management agent
+                        # updates these based on some ruleset managed elsewhere.
+                        roles, users
+                      ]
+                    }
+                  }
+
+                  ################################################################################
+                  # Argo Workflows needs
+                  ################################################################################
+                  module "argo_workflows_eks_role" {
+                    source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+                    role_name = "argo-workflows-irsa"
+
+                    # TODO: Change to specific policy
+                    role_policy_arns = {
+                      policy = "arn:aws:iam::aws:policy/AdministratorAccess"
+                    }
+
+                    oidc_providers = {
+                      one = {
+                        provider_arn               = module.eks.oidc_provider_arn
+                        namespace_service_accounts = ["argo-workflows:full-permissions-service-account", "argo-workflows:argo-workflows-server"]
+                      }
+                    }
+                  }
+
+
+                  resource "random_uuid" "uuid" {}
+
+                  # To store argo artifacts
+                  resource "aws_s3_bucket" "argo-artifacts" {
+                    bucket = "my-tf-test-bucket-\${random_uuid.uuid.result}"
+
+                    tags = {
+                      Blueprint  = local.name
+                    }
+                  }
+                EOF
+            - |
+                cat > /home/ec2-user/environment/eks-blueprint/main.tf <<EOF
+                  locals {
+                    name   = "eks-upgrades-workshop"
+                    region = data.aws_region.current.name
+
+                    vpc_cidr = "10.35.0.0/16"
+                    azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+                    cluster_version = "1.24"
+                    tags = {
+                      Blueprint  = "eks-upgrades-workshop"
+                      GithubRepo = "github.com/aws-ia/terraform-aws-eks-blueprints"
+                    }
+                  }
+
+                  ################################################################################
+                  # Supporting Resources
+                  ################################################################################
+
+                  module "vpc" {
+                    source  = "terraform-aws-modules/vpc/aws"
+                    version = "~> 4.0"
+
+                    name = local.name
+                    cidr = local.vpc_cidr
+
+                    azs             = local.azs
+                    private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
+                    public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+
+                    enable_nat_gateway = true
+                    single_nat_gateway = true
+
+                    public_subnet_tags = {
+                      "kubernetes.io/role/elb" = 1
+                    }
+
+                    private_subnet_tags = {
+                      "kubernetes.io/role/internal-elb" = 1
+                      # Tags subnets for Karpenter auto-discovery
+                      "karpenter.sh/discovery" = local.name
+                    }
+
+                    tags = local.tags
+                  }
+
+
+                  ################################################################################
+                  # Cluster
+                  ################################################################################
+
+                  module "eks" {
+                    source  = "terraform-aws-modules/eks/aws"
+                    version = "~> 19.12"
+
+                    cluster_name                   = local.name
+                    cluster_version                = local.cluster_version
+                    cluster_endpoint_public_access = true
+
+                    cluster_addons = {
+                      aws-ebs-csi-driver = {
+                        most_recent = true
+                      }
+                      coredns = {
+                        most_recent = true
+                        configuration_values = jsonencode({
+                          computeType = "Fargate"
+                          # Ensure that the we fully utilize the minimum amount of resources that are supplied by
+                          # Fargate https://docs.aws.amazon.com/eks/latest/userguide/fargate-pod-configuration.html
+                          # Fargate adds 256 MB to each pod's memory reservation for the required Kubernetes
+                          # components (kubelet, kube-proxy, and containerd). Fargate rounds up to the following
+                          # compute configuration that most closely matches the sum of vCPU and memory requests in
+                          # order to ensure pods always have the resources that they need to run.
+                          resources = {
+                            limits = {
+                              cpu = "0.25"
+                              # We are targetting the smallest Task size of 512Mb, so we subtract 256Mb from the
+                              # request/limit to ensure we can fit within that task
+                              memory = "256M"
+                            }
+                            requests = {
+                              cpu = "0.25"
+                              # We are targetting the smallest Task size of 512Mb, so we subtract 256Mb from the
+                              # request/limit to ensure we can fit within that task
+                              memory = "256M"
+                            }
+                          }
+                        })
+                      }
+                      kube-proxy = {
+                        most_recent = true
+                      }
+                      vpc-cni = {
+                        most_recent    = true
+                        before_compute = true
+                        configuration_values = jsonencode({
+                          env = {
+                            # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
+                            ENABLE_PREFIX_DELEGATION = "true"
+                            WARM_PREFIX_TARGET       = "1"
+                          }
+                        })
+                      }
+                    }
+
+                    vpc_id     = module.vpc.vpc_id
+                    subnet_ids = module.vpc.private_subnets
+
+                    # Fargate profiles use the cluster primary security group so these are not utilized
+                    create_cluster_security_group = false
+                    create_node_security_group    = false
+
+                    manage_aws_auth_configmap = true
+
+                    fargate_profiles = {
+                      karpenter = {
+                        selectors = [
+                          { namespace = "karpenter" }
+                        ]
+                      }
+                      kube_system = {
+                        name = "kube-system"
+                        selectors = [
+                          { namespace = "kube-system" }
+                        ]
+                      }
+                      flux-system = {
+                        selectors = [
+                          { namespace = "flux-system" }
+                        ]
+                      }
+                      argo-workflows = {
+                        selectors = [
+                          { namespace = "argo-workflows" }
+                        ]
+                      }
+                    }
+
+                    tags = merge(local.tags, {
+                      # NOTE - if creating multiple security groups with this module, only tag the
+                      # security group that Karpenter should utilize with the following tag
+                      # (i.e. - at most, only one security group should have this tag in your account)
+                      "karpenter.sh/discovery" = local.name
+                    })
+                  }
+                EOF
+            - sudo chown -R ec2-user:ec2-user /home/ec2-user/environment/eks-blueprint/
+            - cd /home/ec2-user/environment/eks-blueprint && terraform init && terraform apply --auto-approve
+            - cd /home/ec2-user/environment/eks-blueprint && terraform apply --auto-approve
+            - cp /home/ec2-user/environment/eks-blueprint/terraform.tfstate /home/ec2-user/environment/
+            - chown ec2-user:ec2-user /home/ec2-user/environment/terraform.tfstate
+            - curl -o /home/ec2-user/environment/install.sh https://raw.githubusercontent.com/aws-samples/eks-cluster-upgrades-workshop/feat/workshop_v2/install.sh
+            - chmod +x /home/ec2-user/environment/install.sh && chown ec2-user:ec2-user /home/ec2-user/environment/install.sh
             - echo "Bootstrap completed with return code $?"
             - shutdown -r +1
 
@@ -365,7 +740,450 @@ Resources:
         - Key: tag:SSMBootstrap
           Values:
           - Active
+################## SSM Bootstrap for Terraform ##################
+  # TerraformSSMDocument: 
+  #   Type: AWS::SSM::Document
+  #   DependsOn: [C9OutputBucket]
+  #   Properties: 
+  #     Tags:
+  #       - Key: Environment
+  #         Value: AWS Example
+  #     DocumentType: Command
+  #     DocumentFormat: YAML
+  #     Content: 
+  #       schemaVersion: '2.2'
+  #       description: Bootstrap Cloud9 Instance
+  #       mainSteps:
+  #       - action: aws:runShellScript
+  #         name: Terraformbootstrap
+  #         inputs:
+  #           runCommand:
+  #           - "#!/bin/bash"
+  #           - date
+  #           - echo LANG=en_US.utf-8 >> /etc/environment
+  #           - echo LC_ALL=en_US.UTF-8 >> /etc/environment
+  #           - . /home/ec2-user/.bashrc
+  #           - echo '=== UPDATE system packages and INSTALL dependencies ==='
+  #           - yum update -y; yum install -y vim git jq bash-completion moreutils gettext yum-utils perl-Digest-SHA tree
+  #           - echo '=== ENABLE Amazon Extras EPEL Repository and INSTALL Git LFS ==='
+  #           - yum install -y amazon-linux-extras
+  #           - amazon-linux-extras install epel -y
+  #           - yum install -y git-lfs
+  #           - echo '=== INSTALL AWS CLI v2 ==='
+  #           - curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip'
+  #           - unzip awscliv2.zip -d /tmp
+  #           - /tmp/aws/install --update
+  #           - rm -rf aws awscliv2.zip
+  #           - echo '=== INSTALL Kubernetes CLI ==='
+  #           - curl -o /tmp/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+  #           - chmod +x /tmp/kubectl && mv /tmp/kubectl /usr/local/bin/
+  #           - /usr/local/bin/kubectl completion bash > /etc/bash_completion.d/kubectl
+  #           - echo '=== INSTALL Terraform CLI ==='
+  #           - yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+  #           - yum -y install terraform
+  #           - echo '=== CREATE Terraform Files ==='
+  #           - mkdir -p /home/ec2-user/environment/eks-blueprint
+  #           - |
+  #               cat >  /home/ec2-user/environment/eks-blueprint/providers.tf <<EOF
+  #                 provider "aws" {}
+  #                 provider "kubernetes" {
+  #                   host                   = module.eks.cluster_endpoint
+  #                   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  #                   token                  = data.aws_eks_cluster_auth.this.token
+  #                 }
+  #               EOF
+  #           - |
+  #               cat > /home/ec2-user/environment/eks-blueprint/data.tf << EOF
+  #                 data "aws_eks_cluster_auth" "this" {
+  #                   name = module.eks.cluster_name
+  #                 }
+  #                 data "aws_availability_zones" "available" {}
+  #                 data "aws_region" "current" {}
+  #               EOF
+  #           - |
+  #               cat > /home/ec2-user/environment/eks-blueprint/outputs.tf <<EOF
+  #                 ################################################################################
+  #                 # VPC
+  #                 ################################################################################
+  #                 output "aws_vpc_id" {
+  #                   value = module.vpc.vpc_id
+  #                 }
+
+  #                 ################################################################################
+  #                 # Cluster
+  #                 ################################################################################
+  #                 output "cluster_iam_role_name" {
+  #                   value = module.eks.cluster_iam_role_name
+  #                 }
+
+  #                 output "cluster_name" {
+  #                   description = "The Amazon Resource Name (ARN) of the cluster, use"
+  #                   value       = module.eks.cluster_id
+  #                 }
+
+  #                 output "cluster_endpoint" {
+  #                   value = module.eks.cluster_endpoint
+  #                 }
+
+  #                 output "cluster_primary_security_group_id" {
+  #                   value = module.eks.cluster_primary_security_group_id
+  #                 }
+
+  #                 ################################################################################
+  #                 # Karpenter
+  #                 ################################################################################
+  #                 output "karpenter_irsa" {
+  #                   value = module.karpenter_irsa_role.iam_role_arn
+  #                 }
+
+  #                 output "karpenter_instance_profile" {
+  #                   value = aws_iam_instance_profile.karpenter_instance_profile.name
+  #                 }
+
+  #                 ################################################################################
+  #                 # Argo Workflows
+  #                 ################################################################################
+  #                 output "argo_workflows_irsa" {
+  #                   value = module.argo_workflows_eks_role.iam_role_arn
+  #                 }
+
+  #                 output "argo_workflows_bucket_name" {
+  #                   value = aws_s3_bucket.argo-artifacts.id
+  #                 }
+
+  #                 output "argo_workflows_bucket_arn" {
+  #                   value = aws_s3_bucket.argo-artifacts.arn
+  #                 }
+  #               EOF
+  #           - |
+  #               cat > /home/ec2-user/environment/eks-blueprint/related_infra.tf <<EOF
+  #                 ################################################################################
+  #                 # Karpenter Role to use in nodes created by Karpenter
+  #                 ################################################################################
+
+  #                 resource "aws_iam_role" "karpenter_node_role" {
+  #                   name = "KarpenterNodeRole-\${local.name}"
+  #                   assume_role_policy = <<EOF
+  #                 {
+  #                   "Version": "2012-10-17",
+  #                   "Statement": [
+  #                     {
+  #                       "Effect": "Allow",
+  #                       "Principal": {
+  #                         "Service": "ec2.amazonaws.com"
+  #                       },
+  #                       "Action": "sts:AssumeRole"
+  #                     }
+  #                   ]
+  #                 }
+  #                 EOF
+  #                 }
+
+  #                 resource "aws_iam_policy_attachment" "container_registry_policy" {
+  #                   name       = "KarpenterAmazonEC2ContainerRegistryReadOnly"
+  #                   roles      = [aws_iam_role.karpenter_node_role.name]
+  #                   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  #                 }
+
+  #                 resource "aws_iam_policy_attachment" "amazon_eks_worker_node_policy" {
+  #                   name       = "KarpenterAmazonEKSWorkerNodePolicy"
+  #                   roles      = [aws_iam_role.karpenter_node_role.name]
+  #                   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  #                 }
+
+  #                 resource "aws_iam_policy_attachment" "amazon_eks_cni_policy" {
+  #                   name       = "KarpenterAmazonEKS_CNI_Policy"
+  #                   roles      = [aws_iam_role.karpenter_node_role.name]
+  #                   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  #                   lifecycle {
+  #                     ignore_changes = [
+  #                       # Ignore changes to tags, e.g. because a management agent
+  #                       # updates these based on some ruleset managed elsewhere.
+  #                       roles
+  #                     ]
+  #                   }
+  #                 }
+
+  #                 resource "aws_iam_policy_attachment" "amazon_eks_ssm_policy" {
+  #                   name       = "KarpenterAmazonSSMManagedInstanceCore"
+  #                   roles      = [aws_iam_role.karpenter_node_role.name]
+  #                   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  #                 }
+
+  #                 resource "aws_iam_instance_profile" "karpenter_instance_profile" {
+  #                   name = "KarpenterNodeInstanceProfile-\${local.name}"
+  #                   role = aws_iam_role.karpenter_node_role.name
+  #                 }
+
+  #                 ################################################################################
+  #                 # Karpenter IRSA
+  #                 ################################################################################
+  #                 module "karpenter_irsa_role" {
+  #                   source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  #                   role_name                          = "karpenter_controller"
+  #                   attach_karpenter_controller_policy = true
+
+  #                   karpenter_controller_cluster_name         = module.eks.cluster_name
+  #                   karpenter_controller_node_iam_role_arns = [aws_iam_role.karpenter_node_role.arn]
+
+  #                   attach_vpc_cni_policy = true
+  #                   vpc_cni_enable_ipv4   = true
+
+  #                   oidc_providers = {
+  #                     main = {
+  #                       provider_arn               = module.eks.oidc_provider_arn
+  #                       namespace_service_accounts = ["karpenter:karpenter"]
+  #                     }
+  #                   }
+  #                 }
+
+  #                 resource "aws_iam_policy" "karpenter-policy" {
+  #                   name        = "karpenter-policy"
+  #                   path        = "/"
+  #                   description = "karpenter-policy"
+
+  #                   # Terraform's "jsonencode" function converts a
+  #                   # Terraform expression result to valid JSON syntax.
+  #                   policy = jsonencode({
+  #                     Version = "2012-10-17"
+  #                     Statement = [
+  #                       {
+  #                             "Effect": "Allow",
+  #                             "Action": "*",
+  #                             "Resource": "*"
+  #                       }
+  #                     ]
+  #                   })
+  #                 }
+
+  #                 # TODO: Improve policy defined here, to a more specific one
+  #                 resource "aws_iam_policy_attachment" "karpenter_policy_attach" {
+  #                   name       = "karpenter-admin"
+  #                   roles      = [module.karpenter_irsa_role.iam_role_name]
+  #                   policy_arn = aws_iam_policy.karpenter-policy.arn
+  #                   users = []
+
+  #                   lifecycle {
+  #                     ignore_changes = [
+  #                       # Ignore changes to tags, e.g. because a management agent
+  #                       # updates these based on some ruleset managed elsewhere.
+  #                       roles, users
+  #                     ]
+  #                   }
+  #                 }
+
+  #                 ################################################################################
+  #                 # Argo Workflows needs
+  #                 ################################################################################
+  #                 module "argo_workflows_eks_role" {
+  #                   source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  #                   role_name = "argo-workflows-irsa"
+
+  #                   # TODO: Change to specific policy
+  #                   role_policy_arns = {
+  #                     policy = "arn:aws:iam::aws:policy/AdministratorAccess"
+  #                   }
+
+  #                   oidc_providers = {
+  #                     one = {
+  #                       provider_arn               = module.eks.oidc_provider_arn
+  #                       namespace_service_accounts = ["argo-workflows:full-permissions-service-account", "argo-workflows:argo-workflows-server"]
+  #                     }
+  #                   }
+  #                 }
+
+
+  #                 resource "random_uuid" "uuid" {}
+
+  #                 # To store argo artifacts
+  #                 resource "aws_s3_bucket" "argo-artifacts" {
+  #                   bucket = "my-tf-test-bucket-\${random_uuid.uuid.result}"
+
+  #                   tags = {
+  #                     Blueprint  = local.name
+  #                   }
+  #                 }
+  #               EOF
+  #           - |
+  #               cat > /home/ec2-user/environment/eks-blueprint/main.tf <<EOF
+  #                 locals {
+  #                   name   = "eks-upgrades-workshop"
+  #                   region = data.aws_region.current.name
+
+  #                   vpc_cidr = "10.35.0.0/16"
+  #                   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  #                   cluster_version = "1.24"
+  #                   tags = {
+  #                     Blueprint  = "eks-upgrades-workshop"
+  #                     GithubRepo = "github.com/aws-ia/terraform-aws-eks-blueprints"
+  #                   }
+  #                 }
+
+  #                 ################################################################################
+  #                 # Supporting Resources
+  #                 ################################################################################
+
+  #                 module "vpc" {
+  #                   source  = "terraform-aws-modules/vpc/aws"
+  #                   version = "~> 4.0"
+
+  #                   name = local.name
+  #                   cidr = local.vpc_cidr
+
+  #                   azs             = local.azs
+  #                   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
+  #                   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+
+  #                   enable_nat_gateway = true
+  #                   single_nat_gateway = true
+
+  #                   public_subnet_tags = {
+  #                     "kubernetes.io/role/elb" = 1
+  #                   }
+
+  #                   private_subnet_tags = {
+  #                     "kubernetes.io/role/internal-elb" = 1
+  #                     # Tags subnets for Karpenter auto-discovery
+  #                     "karpenter.sh/discovery" = local.name
+  #                   }
+
+  #                   tags = local.tags
+  #                 }
+
+
+  #                 ################################################################################
+  #                 # Cluster
+  #                 ################################################################################
+
+  #                 module "eks" {
+  #                   source  = "terraform-aws-modules/eks/aws"
+  #                   version = "~> 19.12"
+
+  #                   cluster_name                   = local.name
+  #                   cluster_version                = local.cluster_version
+  #                   cluster_endpoint_public_access = true
+
+  #                   cluster_addons = {
+  #                     aws-ebs-csi-driver = {
+  #                       most_recent = true
+  #                     }
+  #                     coredns = {
+  #                       most_recent = true
+  #                       configuration_values = jsonencode({
+  #                         computeType = "Fargate"
+  #                         # Ensure that the we fully utilize the minimum amount of resources that are supplied by
+  #                         # Fargate https://docs.aws.amazon.com/eks/latest/userguide/fargate-pod-configuration.html
+  #                         # Fargate adds 256 MB to each pod's memory reservation for the required Kubernetes
+  #                         # components (kubelet, kube-proxy, and containerd). Fargate rounds up to the following
+  #                         # compute configuration that most closely matches the sum of vCPU and memory requests in
+  #                         # order to ensure pods always have the resources that they need to run.
+  #                         resources = {
+  #                           limits = {
+  #                             cpu = "0.25"
+  #                             # We are targetting the smallest Task size of 512Mb, so we subtract 256Mb from the
+  #                             # request/limit to ensure we can fit within that task
+  #                             memory = "256M"
+  #                           }
+  #                           requests = {
+  #                             cpu = "0.25"
+  #                             # We are targetting the smallest Task size of 512Mb, so we subtract 256Mb from the
+  #                             # request/limit to ensure we can fit within that task
+  #                             memory = "256M"
+  #                           }
+  #                         }
+  #                       })
+  #                     }
+  #                     kube-proxy = {
+  #                       most_recent = true
+  #                     }
+  #                     vpc-cni = {
+  #                       most_recent    = true
+  #                       before_compute = true
+  #                       configuration_values = jsonencode({
+  #                         env = {
+  #                           # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
+  #                           ENABLE_PREFIX_DELEGATION = "true"
+  #                           WARM_PREFIX_TARGET       = "1"
+  #                         }
+  #                       })
+  #                     }
+  #                   }
+
+  #                   vpc_id     = module.vpc.vpc_id
+  #                   subnet_ids = module.vpc.private_subnets
+
+  #                   # Fargate profiles use the cluster primary security group so these are not utilized
+  #                   create_cluster_security_group = false
+  #                   create_node_security_group    = false
+
+  #                   manage_aws_auth_configmap = true
+  #                   aws_auth_roles = [
+  #                     # We need to add in the Karpenter node IAM role for nodes launched by Karpenter
+  #                     {
+  #                       rolearn  = aws_iam_role.karpenter_node_role.arn
+  #                       username = "system:node:{{\EC2PrivateDNSName\}}"
+  #                       groups = [
+  #                         "system:bootstrappers",
+  #                         "system:nodes",
+  #                       ]
+  #                     },
+  #                   ]
+
+  #                   fargate_profiles = {
+  #                     karpenter = {
+  #                       selectors = [
+  #                         { namespace = "karpenter" }
+  #                       ]
+  #                     }
+  #                     kube_system = {
+  #                       name = "kube-system"
+  #                       selectors = [
+  #                         { namespace = "kube-system" }
+  #                       ]
+  #                     }
+  #                     flux-system = {
+  #                       selectors = [
+  #                         { namespace = "flux-system" }
+  #                       ]
+  #                     }
+  #                     argo-workflows = {
+  #                       selectors = [
+  #                         { namespace = "argo-workflows" }
+  #                       ]
+  #                     }
+  #                   }
+
+  #                   tags = merge(local.tags, {
+  #                     # NOTE - if creating multiple security groups with this module, only tag the
+  #                     # security group that Karpenter should utilize with the following tag
+  #                     # (i.e. - at most, only one security group should have this tag in your account)
+  #                     "karpenter.sh/discovery" = local.name
+  #                   })
+  #                 }
+  #               EOF
+  #           - sudo chown -R ec2-user:ec2-user /home/ec2-user/environment/eks-blueprint/
+  #           # - cd /home/ec2-user/environment/eks-blueprint && terraform init && terraform apply --auto-approve
+  #           # - |
+  #           #     bucket_name=$(aws s3 ls | grep -i mod | awk '{print $3}')
+  #           #     aws s3 cp /home/ec2-user/environment/eks-blueprint/terraform.tfstate s3://$bucket_name
+  #           - echo "Bootstrap completed with return code $?"
   
+  # TerraformBootstrapAssociation: 
+  #   Type: AWS::SSM::Association
+  #   DependsOn: C9OutputBucket 
+  #   Properties: 
+  #     Name: !Ref TerraformSSMDocument
+  #     OutputLocation: 
+  #       S3Location:
+  #         OutputS3BucketName: !Ref C9OutputBucket
+  #         OutputS3KeyPrefix: bootstrapoutput
+  #     Targets:
+  #       - Key: tag:SSMBootstrap
+  #         Values:
+  #         - Active2
+
+################## C9 Instance Profile ##################
   C9InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -389,6 +1207,30 @@ Resources:
           Value: Active
         - Key: Environment
           Value: !Sub ${EnvironmentNameC9}
+  
+  ##### Instance to create environment #####
+
+  # EC2Instance:
+  #     Type: AWS::EC2::Instance
+  #     Properties:
+  #       InstanceType: t3.medium
+  #       SecurityGroups: [!Ref 'InstanceSecurityGroup']
+  #       ImageId: !Ref 'LatestAmiId'
+  #       IamInstanceProfile: !Ref C9InstanceProfile
+  #       Tags:
+  #         - Key: SSMBootstrap
+  #           Value: Active2
+
+  # InstanceSecurityGroup:
+  #     Type: AWS::EC2::SecurityGroup
+  #     Properties:
+  #       GroupDescription: Enable SSH access via port 22
+  #       SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 22
+  #         ToPort: 22
+  #         CidrIp: 0.0.0.0/0
+
 
   WorkshopUser:
     Type: 'AWS::IAM::User'

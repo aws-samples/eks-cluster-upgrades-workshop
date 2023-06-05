@@ -1,7 +1,7 @@
 ---
-id: accessing-ide
+id: cloud9
 sidebar_label: 'Accessing Cloud9 IDE'
-sidebar_position: 4
+sidebar_position: 2
 ---
 
 # Accessing the IDE
@@ -42,13 +42,31 @@ This is because we are disabling AWS temporary credentials, you can ignore it an
 
 You may also close the small terminal at the bottom if you wish.
 
-Your IDE comes pre-configured to access the workshop EKS cluster and also provides a set of tools you will need like the `aws` and `kubectl`, `pluto`, `eksctl` CLI tools.
+Your IDE comes pre-configured to access the workshop EKS cluster and also provides a set of tools you will need like the `aws` and `kubectl`, `pluto`, `eksctl`, `kubent` CLI tools.
 
 ```bash
 kubectl version
 pluto version
 eksctl version
+kubent version
 aws --version
+kubent --version
+```
+
+Along with the Cloud9 instance, this workshop already have provisioned for you all needed resources, including the Amazon EKS cluster, check that by running the follow command.
+
+```
+kubectl get nodes
+```
+
+You should see the following output:
+
+```output
+NAME                                                 STATUS   ROLES    AGE   VERSION
+fargate-ip-10-35-28-29.us-east-2.compute.internal    Ready    <none>   53m   v1.24.12-eks-f4dc2c0
+fargate-ip-10-35-37-154.us-east-2.compute.internal   Ready    <none>   53m   v1.24.12-eks-f4dc2c0
+fargate-ip-10-35-38-99.us-east-2.compute.internal    Ready    <none>   53m   v1.24.12-eks-f4dc2c0
+fargate-ip-10-35-45-57.us-east-2.compute.internal    Ready    <none>   53m   v1.24.12-eks-f4dc2c0
 ```
 
 <!-- For example, run the following command to get details about your EKS cluster: -->
