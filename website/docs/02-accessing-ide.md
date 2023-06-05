@@ -1,7 +1,7 @@
 ---
 id: cloud9
 sidebar_label: 'Accessing Cloud9 IDE'
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Accessing the IDE

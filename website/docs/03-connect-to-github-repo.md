@@ -1,7 +1,7 @@
 ---
 id: github_repo
 sidebar_label: 'Connect to GitHub'
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # Connect to GitHub:

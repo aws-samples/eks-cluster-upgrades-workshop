@@ -1,7 +1,7 @@
 ---
 id: gitops
 sidebar_label: 'GitOps'
-sidebar_position: 1
+sidebar_position: 4
 ---
 
 # Why GitOps?
@@ -37,5 +37,61 @@ In the context of Flux, a Kustomization object is a custom resource defined by t
 :::
 
 ```bash
-sed -i "5s/^#//g" /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml
+sed -i 's/# //' /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml
+```
+
+Cheking the manifest to make sure that we have remove the comment from every line:
+
+```bash
+cat /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/add-ons/kustomization.yaml
+```
+
+Your Kustomization manifest should look like this:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - 01-metric-server.yaml
+  - 02-karpenter.yaml
+  - 03-argo-workflows.yaml
+```
+
+Once you push those changes to the GitHub repository, flux will automatically apply and deploy both `karpenter` and `argo-workflows` using a Helm Chart. Let's push those changes:
+
+```bash
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
+git add .
+git commit -m "Added add-ons in kutomization file"
+git push origin main
+```
+
+:::tip
+Keep your GitHub username and GitHub token handy, you will gonna need many times during this workshop.
+:::
+
+Flux will now detect the changes and start the reconciliation process. It does this by periodically polling the GitHub repository for changes. You can monitor the Flux logs to observe the reconciliation process:
+
+```bash
+kubectl -n flux-system get pod -o name | grep -i source | while read POD; do kubectl -n flux-system logs -f $POD --since=1m; done
+```
+You should see logs indicating that the new changes have been detected and applied to the cluster:
+
+```json
+{"level":"info","ts":"2023-06-05T17:01:03.995Z","msg":"stored artifact for commit 'Added add-ons in kutomization file'","controller":"gitrepository","controllerGroup":"source.toolkit.fluxcd.io","controllerKind":"GitRepository","GitRepository":{"name":"flux-system","namespace":"flux-system"},"namespace":"flux-system","name":"flux-system","reconcileID":"d594bbe0-1f6d-4364-8a3f-67daf56035db"}
+```
+
+Veryfing if `karpenter` and `argo-workflows` were installed successfully:
+
+```bash
+kubectl get helmreleases -nflux-system
+```
+
+You should see the following output:
+
+```
+NAME             AGE    READY   STATUS
+argo-workflows   119s   True    Release reconciliation succeeded
+karpenter        119s   True    Release reconciliation succeeded
+metrics-server   32m    True    Release reconciliation succeeded
 ```

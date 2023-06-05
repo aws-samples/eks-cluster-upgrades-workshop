@@ -1,8 +1,0 @@
-{
-  "label": "Control Plane",
-  "position": 6,
-  "link": {
-    "type": "generated-index",
-    "description": "Checking for API backwards compatibility"
-  }
-}
