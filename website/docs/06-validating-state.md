@@ -104,8 +104,71 @@ Let's do the same thing for the `HorizontalPodAutoscaler` manifest:
 kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.yaml
 ```
 
+Let's uncomment `kutomization.yaml` file to flux watch those manifests:
+
+```bash
+sed -i 's/# //' /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/kustomization.yaml
+```
+
+Now let's commit the changes to your GitHub repository, so flux can apply those changes.
+
+```bash
+cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
+git add .
+git commit -m "Changed deprecated APIs"
+git push origin main
+```
+
+Flux will now detect the changes and start the reconciliation process. It does this by periodically polling the GitHub repository for changes. You can monitor the Flux logs to observe the reconciliation process:
+
+```bash
+kubectl -n flux-system get pod -o name | grep -i source | while read POD; do kubectl -n flux-system logs -f $POD --since=1m; done
+```
+You should see logs indicating that the new changes have been detected and applied to the cluster:
+
+```json
+{"level":"info","ts":"2023-06-05T19:56:11.469Z","msg":"stored artifact for commit 'Changed deprecated APIs'","controller":"gitrepository","controllerGroup":"source.toolkit.fluxcd.io","controllerKind":"GitRepository","GitRepository":{"name":"flux-system","namespace":"flux-system"},"namespace":"flux-system","name":"flux-system","reconcileID":"d1808938-8d2c-43f7-8bc0-0d1419778546"}
+```
+
 ## Run argo workflows validate pipeline again
 
 Now let's run the piepeline again to see if we have made all the needed changes before procceding with the Cluster Upgrade. Open `argo-workflows` ui, select your workflow and click in `RESUBMIT`.
 
 ![GitOps toolkit](../static/img/argo-workflows-03.png)
+
+Argo will create a new workflow, now let's wait until this new workflow has finished and then download the latest report as you have done earlier. Open the report, it should look like below:
+
+```
+========================== AWS BASICS VALIDATION ==========================
+Subnet Check: At least one subnet has more than 5 IPs available
+Role Check: Cluster role exists
+Security Group Check: Cluster security group exists 
+ ====================== Kubent Deprecated APIs report ======================
+__________________________________________________________________________________________
+>>> Deprecated APIs removed in 1.25 <<<
+------------------------------------------------------------------------------------------
+KIND                NAMESPACE     NAME             API_VERSION      REPLACE_WITH (SINCE)
+PodSecurityPolicy   <undefined>   eks.privileged   policy/v1beta1   <removed> (1.21.0) 
+ ====================== Self Managed Add-ons ======================
+NAME             AGE     READY   STATUS
+argo-workflows   178m    True    Release reconciliation succeeded
+karpenter        178m    True    Release reconciliation succeeded
+metrics-server   3h29m   True    Release reconciliation succeeded
+====================== Deprecated API in helm charts  ======================
+There were no resources found with known deprecated apiVersions. 
+ =========================== EKS Managed add-ons ===========================
+Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.1 to v1.19.0-eksbuild.2
+Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1 
+ ====================== Must look URLs ======================
+K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions=1.25.0
+EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.25
+```
+
+As you can see we do not have any other deprecated API in use, so we can move on to upgrade our EKS Control Plane.
+
+:::caution
+This pipeline is just for helping during the validation, it is strogly recommended to look into every add-on specific release notes to make sure that no add-on needs to be upgraded before upgrading EKS Control Plane.
+:::
+:::tip
+PodSecurityPolicy is managed by EKS, we don't need to do anything about it
+:::
