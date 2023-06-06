@@ -25,8 +25,11 @@ cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/upgrades-workflows &
 Getting Argo workflows UI URL:
 
 ```bash
-echo $(kubectl get svc -nargo-workflows | awk '{print $4}' | grep -vi external):2746/workflows/undefined?limit=50
+echo $(kubectl get svc -nargo-workflows | awk '{print $4}' | grep -vi external):2746/workflows?limit=50
 ```
+:::note
+Workflow can take a while to appear
+:::
 
 Open URL in your favourite browser. You are going to the workflow applied earlier in the running state.
 
@@ -38,11 +41,11 @@ Now click in the workflow and you are gonna be able to see all the validation st
 
 The workflow will validate the following things:
 
-- **AWS Basics** (Verify that your AWS account has all the resources needed to perform cluster upgrade).
-- **Validate deprecated APIs** (Using kubent, we will look for deprecate or removed APIs that we still using and we need to replace before upgrading).
-- **Validate Self Managed Add-ons**  (Using pluto, it will look for deprecated APIs in Helm charts, since we have all the self-managed add-ons deployed using charts).
-- **Validate Managed Add-ons** (Validate if we need to upgrade your AWS EKS managed add-ons).
-- **Get Kubernetes/EKS documentation** (It will generate for you the links that you should look at before moving on with the clyster upgrade).
+- **AWS Basics** ([Verify that your AWS account has all the resources needed to perform cluster upgrade](https://aws.github.io/aws-eks-best-practices/upgrades/#verify-basic-eks-requirements-before-upgrading)).
+- **Validate deprecated APIs** (Using [kubent](https://github.com/doitintl/kube-no-trouble), we will look for deprecate or removed APIs that we still using and we need to replace before upgrading).
+- **Validate Self Managed Add-ons**  (Using [pluto](https://github.com/FairwindsOps/pluto), it will look for deprecated APIs in Helm charts, since we have all the self-managed add-ons deployed using charts).
+- **Validate Managed Add-ons** (Validate if we need to upgrade your AWS EKS managed add-ons using [eksctl](https://eksctl.io/) and [awscli](https://aws.amazon.com/pt/cli/)).
+- **Get Kubernetes/EKS documentation** (It will generate for you the links that you should look at before moving on with the cluster upgrade).
 
 ## Checking workflow report
 

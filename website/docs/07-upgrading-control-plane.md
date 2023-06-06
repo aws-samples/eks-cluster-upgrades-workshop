@@ -269,7 +269,7 @@ git push origin main
 Wait few seconds, and validate that Flux has applied the new PDB:
 
 ```bash
-kubectl -n default get pdb/nginx-pdb
+kubectl -n default get pdb/nginx-pdb -w
 ```
 
 You should see the output similar to this:
