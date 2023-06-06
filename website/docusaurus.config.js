@@ -78,7 +78,7 @@ const config = {
             type: 'doc',
             docId: 'intro',
             position: 'left',
-            label: 'Introduction',
+            label: 'Start',
           },
 
           // {
@@ -129,12 +129,12 @@ const config = {
           //   position: 'left',
           //   label: 'Karpenter Rollout',
           // },
-          {
-            type: 'doc',
-            docId: 'Conclusion',
-            position: 'left',
-            label: 'Conclusion',
-          },
+          // {
+          //   type: 'doc',
+          //   docId: 'Conclusion',
+          //   position: 'left',
+          //   label: 'Conclusion',
+          // },
           {
             type: 'doc',
             docId: 'cleanup',

@@ -12,7 +12,11 @@ This is a suggested approach on how to implement a workflow to create an upgrade
 
 Checking for deprecated APIs and updating your manifests to use the latest API versions before upgrading your Kubernetes cluster is crucial for preventing compatibility issues, avoiding downtime, maintaining a secure and stable environment, easing maintenance, staying informed about Kubernetes changes, and ensuring compliance with best practices. Using tools like Pluto, kube no trouble and kubectl convert streamlines the process of identifying and updating deprecated APIs, making it easier to maintain a healthy Kubernetes environment.
 
-![GitOps toolkit](../static/img/api-reorg.png)
+<div style={{textAlign: 'center'}}>
+  <img src="/img/api-reorg.png"/>
+</div>
+
+<!-- ![GitOps toolkit](../static/img/api-reorg.png) -->
 
 ## Argo workflows validate pipeline
 

@@ -8,10 +8,14 @@ sidebar_position: 1
 
 This workshop can run in two different ways:
 
-- `AWS Event`: All the resources are already deployed as part of the event, including the `Amazon EKS Cluster` along with all networking resources and permissions, you can proceed to Accessing Cloud9 IDE.
+- `AWS Event`: All the resources are already deployed as part of the event, including the `Amazon EKS Cluster` along with all networking resources and permissions, you can proceed to [**Accessing Cloud9 IDE**](./02-accessing-ide.md).
 - `Self`: You will need to deploy the Cloudformation template in order to deploy the environment.
 
 ## Creating the environment, self event
+
+:::caution
+Only proceed with this step if executing it by your own
+:::
 
 In order to start the environment, you will need to deploy the following Cloudformation template. This can be done, either via console or terminal:
 

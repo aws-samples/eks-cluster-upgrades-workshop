@@ -23,9 +23,6 @@ To do this, you can run the following Bash command with a for loop that lists th
 
 ```bash
 for stack in $(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE --query "StackSummaries[?contains(StackName, 'Karpenter-eks-upgrade-demo') || contains(StackName, 'aws-cloud9-eks-upgrades-workshop') || contains(StackName, 'cloudformation')].StackName" --output text); do
-  if [ $stack == "Karpenter-eks-upgrade-demo" ]; then
-    aws cloudformation delete-stack --stack-name $stack
-  fi
   if [ $stack == "aws-cloud9-eks-upgrades-workshop"* ]; then
     aws cloudformation delete-stack --stack-name $stack
   fi
