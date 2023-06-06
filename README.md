@@ -37,18 +37,10 @@ To spin -up your learn environment, go to [`website`](./website/README.md#local-
 
 **You will need to fork this repo.**
 
-Once forked, execute `install.sh` script passing the following parameters:
-
-- git_password
-- git_username
-- git_url
-- git_branch
-- aws_region
-
-Your execution should look linke this:
+Once forked, execute `install.sh` (located in the root of this repo) script and fill te asked questions:
 
 ```bash
-./install.sh ghp_xxxxxxxxx user_name https://github.com/user_name/eks-cluster-upgrades-workshop.git your_desired_branch
+bash ./install.sh 
 ```
 
 > When asked for `tf_state_path` leave it empty to provision all the components
