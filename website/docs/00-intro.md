@@ -31,14 +31,17 @@ Amazon EKS is committed to supporting at least four production-ready versions of
 
 ## About the workshop
 
-The Amazon cluster upgrades workshop is built to provide you with a reference architecture that can help make your Amazon EKS Cluster upgrades **less painful and more seamless**. To achieve this, we will use a `GitOps` strategy with` Fluxv2` for components reconciliation and `Karpenter` for Node Scaling.
+The Amazon cluster upgrades workshop is built to provide you with a reference architecture that can help make your Amazon EKS Cluster upgrades **less painful and more seamless**. To achieve this, we will use a `GitOps` strategy with` Fluxv2` for components reconciliation, `Karpenter` for Node Scaling along with `AWS Fargate` for the addons, and `Argo Workflows` to validate what has to be changed before running the upgrade.
 
 
 ## Workshop architecture
 
-One of the key benefits of using `GitOps` is that it enables us to use a `mono repository` approach for deploying both add-ons and applications. This approach makes the upgrade process much smoother because we have a single location to look at for deprecated API versions and ensure that add-ons are backwards compatible.
+The base architecture composed by `Amazon EKS Cluster`, `EKS Managed Add-ons`, and `Flux` is deployed with Terraform.
+
+`Flux` enables us to use a `mono repository` approach for deploying both `Self-Managed Add-Ons` and `Apps`. 
+This approach makes the upgrade process much smoother because we have a single location to look at for deprecated API versions and ensure that add-ons are backwards compatible.
 
 ![EKS Architecture](../static/img/eks-upgrades-architecture.png)
 
-By the end of this workshop, you will have a solid understanding of how to use `GitOps with Fluxv2` and `Karpenter` to simplify the EKS Cluster upgrade process. We hope that this will help you streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
+During the next steps of this workshop, you learn how to setup those components and gain a solid understanding of how to use `GitOps with Fluxv2`, `Karpenter`, and `Argo Workflows` to simplify the EKS Cluster upgrade process. We hope that this will help you streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
 
