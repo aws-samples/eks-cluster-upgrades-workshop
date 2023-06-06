@@ -2,7 +2,7 @@
 
 ![Tests](https://github.com/aws-samples/eks-cluster-upgrades-workshop/actions/workflows/production.yaml/badge.svg?branch=main)
 
-:bangbang: THIS WORKSHOP IS PERFORMING UPGRADES FROM VERSION `1.23` :bangbang:
+:bangbang: THIS WORKSHOP IS PERFORMING UPGRADES FROM VERSION `1.24` :bangbang:
 
 This workshop covers best practices that are applicable for both older and newer versions of Kubernetes. We are committed to keeping our content up-to-date with the latest Amazon EKS releases, Let's get started!
 
@@ -33,24 +33,29 @@ The workshop content itself is a `docusaurus` site. All workshop content is writ
 
 To spin -up your learn environment, go to [`website`](./website/README.md#local-development) page and follow the instructions to run your docussaurus website.
 
-<!-- In this section you can find all the necessary files for the workshop module reference. Feel free to explore and use these files as a reference for your other modules.
+### Locally deploy with terraform:
 
-- [Creating the environment](./modules/)
-- [Exploring the environment](./modules/01_gitops_files.md)
-- [How GitOps reconciliation works](./modules/02_flux_sync.md)
-- [How Karpenter matches Control Plane API Version](./modules/03_karpenter_scaling.md)
-- [Validating current state, apps/add-ons](./modules/04_validating_state.md)
-  - [Checking for Deprecated APIs in applications](./modules/04_validating_state.md#checking-for-deprecated-apis-in-applications)
-  - [Checking for deprecated APIs within Helm charts](./modules/04_validating_state.md#checking-for-deprecated-apis-within-helm-charts)
-  - [Check if any installed EKS managed add-ons needs to be upgraded for the target version](./modules/04_validating_state.md#check-if-any-installed-eks-managed-add-ons-needs-to-be-upgraded-for-the-target-version)
-  - [Converting manifests](./modules/04_validating_state.md#converting-manifests-with-kubectl-convert)
-- [Upgrade EKS Control Plane](./modules/05_eks_upgrade.md)
-- [Upgrade Managed NodeGroups](./modules/06_managed_nodes_upgrade.md)
-- [Upgrade Managed Add-ons](./modules/07_upgrade_managed_addons.md)
-- [Rollout nodes with Karpenter](./modules/08_rollout_karpenter_nodes.md)
-  - [PDB in action](./modules/08_rollout_karpenter_nodes.md#pdb-in-action)
-- TBD [Wrap-up upgrade]() -->
+**You will need to fork this repo.**
 
+Once forked, execute `install.sh` script passing the following parameters:
+
+- git_password
+- git_username
+- git_url
+- git_branch
+- aws_region
+
+Your execution should look linke this:
+
+```bash
+./install.sh ghp_xxxxxxxxx user_name https://github.com/user_name/eks-cluster-upgrades-workshop.git your_desired_branch
+```
+
+> When asked for `tf_state_path` leave it empty to provision all the components
+
+After that you will need to uncomment lines `5` and `6` of `gitops/add-ons/kustomization.yaml` file
+
+Then you can push the changes to your desired branch and flux will reconcile the changes
 
 ## Security
 
