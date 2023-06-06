@@ -19,7 +19,7 @@ Only proceed with this step if executing it by your own
 
 In order to start the environment, you will need to deploy the following Cloudformation template. This can be done, either via console or terminal:
 
-[EKS Upgrades Workshop CF](../../static/scripts/cloudformation.yaml)
+[EKS Upgrades Workshop CF](https://raw.githubusercontent.com/aws-samples/eks-cluster-upgrades-workshop/feat/workshop_v2/helpers/cloudformation-new-stack.yaml)
 
 Give the name, `eks-upgrades-workshop` to you stack
 
