@@ -24,4 +24,5 @@ The above Cloudformation script will provision a `Cloud9` with all the required 
 :::tip
 Wait at least `20 minutes` before moving on, this will give time to Cloudformation and SSM finishes its deploy. Might be a good time for a break.
 
+Only proceed after the Amazon EKS cluster is created. [Check here!](https://console.aws.amazon.com/eks/home)
 :::
