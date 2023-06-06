@@ -1,6 +1,6 @@
 ---
 id: upgrading-control-plane
-sidebar_label: 'Upgrade Control Plane'
+sidebar_label: 'Upgrade Amazon EKS'
 sidebar_position: 6
 ---
 
