@@ -57,6 +57,10 @@ resources:
   - 03-argo-workflows.yaml
 ```
 
+:::tip
+You can include more add-ons if you want
+:::
+
 Once you push those changes to the GitHub repository, flux will automatically apply and deploy both `karpenter` and `argo-workflows` using a Helm Chart. Let's push those changes:
 
 ```bash
