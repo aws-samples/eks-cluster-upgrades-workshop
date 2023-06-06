@@ -74,7 +74,7 @@ token_created=$(prompt_yes_no "Have you already created your personal access tok
 if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     # Prompt for git username
     read -p "Enter your git username: " git_username
-    read -p "Enter your git branch: " git_branch
+    read -p "Enter your git branch (leave blank to set to main): " git_branch
 
     # create an if to validate the branch and set main as default if not provided by user 
     if [[ -z $git_branch ]]; then
