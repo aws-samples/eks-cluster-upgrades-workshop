@@ -15,31 +15,31 @@ Checking for deprecated APIs and updating your manifests to use the latest API v
 
 ## Argo workflows validate pipeline
 
-For this workshop we have automated all the validation steps in an `argo-workflows` pipeline, so let's run our workflow to verify what are the things that we need to change.
+For this workshop, we have automated all the validation steps in an `argo-workflows` pipeline, so let's run our workflow to verify what are the things that we need to change.
 
 ```bash
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/upgrades-workflows && kubectl apply -f upgrade-validate-workflow.yaml
 ```
 
-Getting Argo workflows UI url:
+Getting Argo workflows UI URL:
 
 ```bash
 echo $(kubectl get svc -nargo-workflows | awk '{print $4}' | grep -vi external):2746/workflows/undefined?limit=50
 ```
 
-Open URL in your favourite browser, you are going to be able to the workflow applied earlier in running state.
+Open URL in your favourite browser. You are going to the workflow applied earlier in the running state.
 
 ![GitOps toolkit](../static/img/argo-workflows-00.png)
 
-Now click in the workflow and you are gonna be able to see all the validation stetps that this workflow is executing:
+Now click in the workflow and you are gonna be able to see all the validation steps that this workflow is executing:
 
 ![GitOps toolkit](../static/img/argo-workflows-01.png)
 
 The workflow will validate the following things:
 
-- **AWS Basics** (Verify that you AWS account have all the resources needed to perfom cluster upgrade).
-- **Validate deprecated APIs** (Using kubent we will looking for deprecate or removed APIs that we still using and we need to replace before upgrading).
-- **Validate Self Managed Add-ons** (Using Pluto it will looking for deprecated APIs in Helm charts, since we have all the self-managed add-ons deployed using charts).
+- **AWS Basics** (Verify that your AWS account has all the resources needed to perform cluster upgrade).
+- **Validate deprecated APIs** (Using kubent, we will look for deprecate or removed APIs that we still using and we need to replace before upgrading).
+- **Validate Self Managed Add-ons**  (Using pluto, it will look for deprecated APIs in Helm charts, since we have all the self-managed add-ons deployed using charts).
 - **Validate Managed Add-ons** (Validate if we need to upgrade your AWS EKS managed add-ons).
 - **Get Kubernetes/EKS documentation** (It will generate for you the links that you should look at before moving on with the clyster upgrade).
 
@@ -137,11 +137,11 @@ You should see logs indicating that the new changes have been detected and appli
 
 ## Run argo workflows validate pipeline again
 
-Now let's run the piepeline again to see if we have made all the needed changes before procceding with the Cluster Upgrade. Open `argo-workflows` ui, select your workflow and click in `RESUBMIT`.
+Now let's run the pipeline again to see if we have made all the needed changes before proceeding with the Cluster Upgrade. Open `argo-workflows` ui, select your workflow and click in `RESUBMIT`.
 
 ![GitOps toolkit](../static/img/argo-workflows-03.png)
 
-Argo will create a new workflow, now let's wait until this new workflow has finished and then download the latest report as you have done earlier. Open the report, it should look like below:
+Argo will create a new workflow. Now let's wait until this new workflow has finished and then download the latest report as you have done earlier. Open the report, it should look like below:
 
 ```
 ========================== AWS BASICS VALIDATION ==========================
@@ -169,11 +169,11 @@ K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&relea
 EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.25
 ```
 
-As you can see we do not have any other deprecated API in use, so we can move on to upgrade our EKS Control Plane.
+As you can see, we do not have any other deprecated API in use, so we can move on to upgrade our EKS Control Plane.
 
 :::caution
 This pipeline is just for helping during the validation, it is strogly recommended to look into every add-on specific release notes to make sure that no add-on needs to be upgraded before upgrading EKS Control Plane.
 :::
 :::tip
-PodSecurityPolicy is managed by EKS, we don't need to do anything about it
+PodSecurityPolicy is managed by EKS. We don't need to do anything about it
 :::

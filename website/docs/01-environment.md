@@ -13,7 +13,7 @@ This workshop can run in two different ways:
 
 ## Creating the environment, self event
 
-In order to properly start the environment you will need to deploy the following Cloudformation template, this can be done, either via console or terminal:
+In order to start the environment, you will need to deploy the following Cloudformation template. This can be done, either via console or terminal:
 
 [EKS Upgrades Workshop CF](../../static/scripts/cloudformation.yaml)
 
@@ -22,5 +22,6 @@ Give the name, `eks-upgrades-workshop` to you stack
 The above Cloudformation script will provision a `Cloud9` with all the required tools in order to execute the workshop along with `AWS VPC`, `Amazon EKS Cluster`, `IAM roles and permissions`, `Install Flux V2`.
 
 :::tip
-Wai at least `20 minutes` before move on, this will give time to Cloudformation and SSM finishes its deploy. Might be a good time for a break.
+Wait at least `20 minutes` before moving on, this will give time to Cloudformation and SSM finishes its deploy. Might be a good time for a break.
+
 :::

@@ -17,7 +17,7 @@ flux uninstall
 
 ## Delete PDBs
 
-We are going to delete all pod Disruption Budgets, to make sure that our cluster will not stuck in deleting state.
+We are going to delete all pod Disruption Budgets, to make sure that our cluster will not be stuck in deleting state.
 
 ```bash
 kubectl delete poddisruptionbudget.policy/nginx-pdb -ndefault
@@ -56,4 +56,4 @@ done
 This command will delete the AWS resources created during the workshop in the order specified to ensure a clean removal. Be sure to have the AWS CLI installed and configured with your AWS credentials for the command to work.
 
 
-Also remember to delete any extra resource you may have added to the account during the workshop!
+Also, remember to delete any extra resource you may have added to the account during the workshop!
