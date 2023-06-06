@@ -7,32 +7,17 @@ sidebar_position: 11
 # Cleanup
 
 
-Congratulations on completing the EKS Upgrades Workshop! To avoid incurring unnecessary costs and to keep your AWS environment tidy, it is important to clean up the resources created during the workshop.
+Congratulations on completing the EKS Upgrades Workshop! To avoid incurring unnecessary costs and to keep your AWS environment, it is important to clean up the resources created during the workshop.
 
-## Uninstall Fluxv2
-
-```bash
-flux uninstall
-```
-
-## Delete PDBs
-
-We are going to delete all pod Disruption Budgets, to make sure that our cluster will not be stuck in deleting state.
+## Terraform destroy
 
 ```bash
-kubectl delete poddisruptionbudget.policy/nginx-pdb -ndefault
-kubectl delete poddisruptionbudget.policy/karpenter -nkarpenter
+terraform state rm 'module.flux_v2'
 
-kubectl get poddisruptionbudget -A
+terraform destroy -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=main" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25" --auto-approve
 ```
 
-## Remove the EKS cluster created for the workshop.
-
-```bash
-eksctl delete cluster -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/helpers/cluster.yaml
-```
-
-## Remove Cloudformation Stacks
+## Remove Cloudformation Stacks (Only if executing this workshop outside of an AWS event)
 
 To do this, you can run the following Bash command with a for loop that lists the AWS CloudFormation stacks, selects the stacks with the names karpenter-eks-upgrade-demo, aws-cloud9-eks-upgrades-workshop, and eks-workshop, and then deletes them in that order:
 
