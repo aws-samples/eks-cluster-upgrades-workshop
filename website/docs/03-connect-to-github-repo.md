@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # Connect to GitHub:
 
-Since we are using a GitOps approach we will need to install and connect `FluxV2` to a GitHub repository.
+Since we are using a GitOps approach, we will need to install and connect `FluxV2` to a GitHub repository.
 
 ## GitHub Personal Access Token
 
@@ -48,7 +48,7 @@ Fill all the asked questions, and when it asks your for terraform state, make su
 Enter the tf_state path (leave blank to generate infrastructure from scratch): /home/ec2-user/environment/terraform.tfstate
 ```
 
-After this, the script will initialize and install `FluxV2` in your cluster pointing to your forked `GitHub` repository defined earlier, if everything succedeed you should see the following output.
+After this, the script will initialize and install `FluxV2` in your cluster pointing to your forked `GitHub` repository defined earlier. If everything succeeded, you should see the following output.
 
 ```
 Now proceed to flux module

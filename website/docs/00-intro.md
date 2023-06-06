@@ -10,7 +10,7 @@ One of the key considerations for people who have chosen Amazon Elastic Kubernet
 
 ## Kubernetes project release process
 
-The Kubernetes project usually launches new minor versions on average every three months and every version is supported for about twelve months after their release.
+The Kubernetes project usually launches new minor versions on average every three months, and every version is supported for about twelve months after their release.
 
 
 ![Kubernetes version release](../static/img/kubernetes-release-diagram.png)
@@ -21,17 +21,17 @@ Before adopting Kubernetes, be sure that you will have the commitment to stay up
 
 ## Amazon EKS release process
 
-Amazon EKS is typically some weeks behind the latest Kubernetes version, this is because before a new version of Kubernetes is made available on EKS **it is thoroughly tested to ensure stability and compatibility with other AWS services and tools.**
+Amazon EKS is typically some weeks behind the latest Kubernetes version, this is because before a new version of Kubernetes is made available on EKS, **it is thoroughly tested to ensure stability and compatibility with other AWS services and tools.**
 
 ![Kubernetes version release](../static/img/EKS-Upgrades-EKS-Release.png)
 
 :::note
-Amazon EKS is committed to supporting at least four production-ready versions of Kubernetes at any given time. Whereas the Kubernetes project only support the latest 3 versions.
+Amazon EKS is committed to supporting at least four production-ready versions of Kubernetes. Whereas the Kubernetes project only supports the latest 3 versions.
 :::
 
 ## About the workshop
 
-The Amazon cluster upgrades workshop is built to provide you with a reference architecture that can help make your Amazon EKS Cluster upgrades **less painful and more seamless**. To achieve this, we will be using a `GitOps` strategy with` Fluxv2` for components reconciliation and `Karpenter` for Node Scaling.
+The Amazon cluster upgrades workshop is built to provide you with a reference architecture that can help make your Amazon EKS Cluster upgrades **less painful and more seamless**. To achieve this, we will use a `GitOps` strategy with` Fluxv2` for components reconciliation and `Karpenter` for Node Scaling.
 
 
 ## Workshop architecture
@@ -40,5 +40,5 @@ One of the key benefits of using `GitOps` is that it enables us to use a `mono r
 
 ![EKS Architecture](../static/img/eks-upgrades-architecture.png)
 
-By the end of this workshop, you will have a solid understanding of how to use `GitOps with Fluxv2` and `Karpenter` to simplify the EKS Cluster upgrade process. We hope that this will help you to streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
+By the end of this workshop, you will have a solid understanding of how to use `GitOps with Fluxv2` and `Karpenter` to simplify the EKS Cluster upgrade process. We hope that this will help you streamline your workflow and ensure that your infrastructure is always up-to-date and functioning smoothly. So, let's dive in and get started!
 

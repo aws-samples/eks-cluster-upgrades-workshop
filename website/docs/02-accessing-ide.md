@@ -6,23 +6,23 @@ sidebar_position: 2
 
 # Accessing the IDE
 
-As part of the lab environment you have access to an AWS Cloud9 IDE.
+As part of the lab environment, you have access to an AWS Cloud9 IDE.
 
-To access the Cloud9 IDE, log into your [AWS console](https://console.aws.amazon.com/). Search for Cloud9 in the menu bar at the top of the screen:
+To access the Cloud9 IDE, log into your [AWS console](https://console.aws.amazon.com/) and search for Cloud9 in the menu bar at the top of the screen:
 
 ![Search for the Cloud9 service](./assets/search.png)
 
-When the main Cloud9 screen opens expand the menu on the left side of the screen:
+When the main Cloud9 screen opens, expand the menu on the left side of the screen:
 
 ![Access Cloud9 service menu](./assets/menu.png)
 
-There will be a Cloud9 environment named **eks-upgrades-workshop** available, click the **Open** button to launch the IDE:
+There will be a Cloud9 environment named **eks-upgrades-workshop** available. Click the **Open** button to launch the IDE:
 
 ![Open the Cloud9 IDE](./assets/environment.png)
 
 :::tip
 
-If you do not see the eks-upgrades-workshop Cloud9 environment this is because it is owned by another IAM user. Change the owner on Cloud9 Console.
+If you do not see the eks-upgrades-workshop Cloud9 environment, this is because it is owned by another IAM user. Change the owner on Cloud9 Console.
 
 :::
 
@@ -35,14 +35,14 @@ This will open a new tab with a fresh terminal.
 :::info
 You might see the following message: `An error occurred (AccessDeniedException) when calling the UpdateEnvironment operation: User: arn:aws:sts::xxxxxxxxxx:assumed-role/eks-upgrades-admin/i-xxxxxxxxxxx is not authorized to perform: cloud9:UpdateEnvironment on resource: xxxxxxxx with an explicit deny in an identity-based policy`
 
-This is because we are disabling AWS temporary credentials, you can ignore it and move on
+This is because we are disabling AWS temporary credentials. You can ignore it and move on
 :::
 
 ![Shows new Cloud9 terminal](./assets/terminal.png)
 
 You may also close the small terminal at the bottom if you wish.
 
-Your IDE comes pre-configured to access the workshop EKS cluster and also provides a set of tools you will need like the `aws` and `kubectl`, `pluto`, `eksctl`, `kubent` CLI tools.
+Your IDE comes pre-configured to access the workshop EKS cluster and also provides a set of tools you will need, like the `aws` and `kubectl`, `pluto`, `eksctl`, `kubent` CLI tools.
 
 ```bash
 kubectl version
@@ -53,7 +53,7 @@ aws --version
 kubent --version
 ```
 
-Along with the Cloud9 instance, this workshop already have provisioned for you all needed resources, including the Amazon EKS cluster, check that by running the follow command.
+Along with the Cloud9 instance, this workshop already has provisioned for you all needed resources, including the Amazon EKS cluster. Check that by running the follow command.
 
 ```
 kubectl get nodes

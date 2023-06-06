@@ -6,7 +6,7 @@ sidebar_position: 5
 
 # Karpenter during the upgrade process
 
-Karpenter is a Kubernetes node scaling that has the goal of automatically launches just the right compute resources to handle your cluster's applications. Many people position Karpenter just as a way to save money making Spot instance usage easier, but Karpenter can also help customer in reduce their operational overhead. Karpenter by default will use Amazon EKS optimized AMIs, whenever Karpenter launches a new node, it will match the Control Plane version of that node. It means that after an upgrade process you don't need to upgrade all your Nodes at once, you can let Karpenter little by little replace nodes with old kubelet version, to new ones that matches EKS Control Plane version.
+Karpenter is a Kubernetes node scaling that has the goal of automatically launches just the right compute resources to handle your cluster’s applications. Many people position Karpenter just to save money, making Spot instance usage easier, but Karpenter can also help a customer reduce their operational overhead. Karpenter, by default, will use Amazon EKS optimized AMIs. Whenever Karpenter launches a new node, it will match the Control Plane version of that node. It means that after an upgrade process you don’t need to upgrade all your Nodes at once, you can let Karpenter little by little replace nodes with old kubelet version, to new ones that matches EKS Control Plane version.
 
 ## Exploring the workload
 
@@ -76,10 +76,10 @@ ip-192-168-60-113.ec2.internal   Ready    <none>   21m   v1.24.xx-eks-a59e1f0
 ```
 
 :::tip
-In the above command you will see that Karpenter by default will matches the kubelet Node version with the EKS Control Plane version.
+In the above command you will see that Karpenter by default will match the kubelet Node version with the EKS Control Plane version.
 :::
 
-To make sure that those Pods are running in this new Node created by Karpenter, let's execute the follow command:
+To make sure that those Pods are running in this new Node created by Karpenter, let's execute the following command:
 
 ```bash
 kubectl -n default get pods -o wide --field-selector spec.nodeName=$(kubectl get nodes -l node-type=applications | awk '/ip/ {print $1}')
@@ -94,4 +94,4 @@ nginx-c5bfd7b85-g67lb   1/1     Running   0          48m   10.35.33.115   ip-10-
 nginx-c5bfd7b85-swmvj   1/1     Running   0          48m   10.35.33.112   ip-10-35-46-50.us-east-2.compute.internal   <none>           <none>
 ```
 
-In this module we used Karpenter for Node scaling, making sure that just what we apply both `toleration` and `NodeSelector` will be scheduled in Karpenter Nodes.
+In this module, we used Karpenter for Node scaling, making sure that just what we apply both `toleration` and `NodeSelector` will be scheduled in Karpenter Nodes.
