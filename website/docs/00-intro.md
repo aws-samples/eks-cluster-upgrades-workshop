@@ -36,7 +36,7 @@ The Amazon cluster upgrades workshop is built to provide you with a reference ar
 
 ## Workshop architecture
 
-The base architecture that is composed by `Amazon EKS Cluster`, `EKS Managed Add-ons` and `Flux` that are deployed with Terraform.
+The base architecture composed by `Amazon EKS Cluster`, `EKS Managed Add-ons`, and `Flux` is deployed with Terraform.
 
 `Flux` enables us to use a `mono repository` approach for deploying both `Self-Managed Add-Ons` and `Apps`. 
 This approach makes the upgrade process much smoother because we have a single location to look at for deprecated API versions and ensure that add-ons are backwards compatible.
