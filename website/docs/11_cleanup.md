@@ -14,7 +14,7 @@ Congratulations on completing the EKS Upgrades Workshop! To avoid incurring unne
 ```bash
 terraform state rm 'module.flux_v2'
 
-terraform destroy -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=main" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25" --auto-approve
+terraform destroy -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25" --auto-approve
 ```
 
 ## Remove Cloudformation Stacks (Only if executing this workshop outside of an AWS event)

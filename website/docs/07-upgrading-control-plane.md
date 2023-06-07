@@ -59,7 +59,7 @@ We have used terraform to spin-up our cluster, all the add-ons are managed via F
 ```bash
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/terraform/clusters
 
-terraform plan -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=main" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25"
+terraform plan -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25"
 ```
 
 As you can see we are defining the variable `cluster_version=1.25` forcing terraform to change the Control Plane to version `1.25`. Also since we are using EKS managed add-ons we can upgrade tham all together to the latest available version, see snippet below of the output of `terraform plan`:
@@ -135,7 +135,7 @@ As you can see we are defining the variable `cluster_version=1.25` forcing terra
 As you can see, using terraform we are forcing all the `managed-add-ons` also to be upgraded to the latest available version, now let's apply the script.
 
 ```bash
-terraform apply --auto-approve -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=main" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25"
+terraform apply --auto-approve -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25"
 ```
 
 :::note

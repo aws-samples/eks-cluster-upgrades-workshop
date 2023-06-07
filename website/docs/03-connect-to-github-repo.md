@@ -27,6 +27,7 @@ export GIT_BRANCH=main
 ```bash
 echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" | tee -a ~/.bash_profile
 echo "export GITHUB_USER=${GITHUB_USER}" | tee -a ~/.bash_profile
+echo "export GIT_BRANCH=${GIT_BRANCH}" | tee -a ~/.bash_profile
 ```
 
 ## Create a fork of this [repo](https://github.com/aws-samples/eks-cluster-upgrades-workshop) in your GitHub account.

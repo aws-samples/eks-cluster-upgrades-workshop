@@ -100,7 +100,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     echo "Git URL: $git_url"
 
     # Proceed with further actions
-    echo "Proceeding with further actions..."
+    echo "Proceeding with further actions... Cloning your forked GitHub Repository"
     git clone "$git_url" -b $git_branch
 
     read -p "Enter the tf_state path (leave blank to generate infrastructure from scratch): " tf_state_path
@@ -112,6 +112,8 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     fi
     
     cd eks-cluster-upgrades-workshop/terraform/clusters
+
+    echo "Configuring Terraform"
 
     terraform init
 
@@ -126,7 +128,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
 
     aws eks --region $aws_region update-kubeconfig --name eks-upgrades-workshop
 
-    echo "Change needed variables on template"
+    echo "Change needed variables on template for GitOps"
 
     # Retrieve Terraform outputs and set them as environment variables
     
