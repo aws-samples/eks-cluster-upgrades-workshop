@@ -263,7 +263,7 @@ We have changed the `minAvailable` from `3` to `1`, this will give us space to d
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git add .
 git commit -m "Changed PDB manifest from 3 to 1"
-git push origin main
+git push origin $GIT_BRANCH
 ```
 
 Wait few seconds, and validate that Flux has applied the new PDB:

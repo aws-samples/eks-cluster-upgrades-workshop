@@ -129,7 +129,7 @@ Now let's commit the changes to your GitHub repository, so flux can apply those 
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git add .
 git commit -m "Changed deprecated APIs"
-git push origin main
+git push origin $GIT_BRANCH
 ```
 
 Flux will now detect the changes and start the reconciliation process. It does this by periodically polling the GitHub repository for changes. You can monitor the Flux logs to observe the reconciliation process:

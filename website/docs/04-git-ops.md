@@ -67,7 +67,7 @@ Once you push those changes to the GitHub repository, flux will automatically ap
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/
 git add .
 git commit -m "Added add-ons in kutomization file"
-git push origin main
+git push origin $GIT_BRANCH
 ```
 
 :::tip

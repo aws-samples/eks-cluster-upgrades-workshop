@@ -21,6 +21,7 @@ Remember to use the GitHub legacy tokens
 ```bash
 export GITHUB_TOKEN=<your-token>
 export GITHUB_USER=<your-username>
+export GIT_BRANCH=main
 ```
 
 ```bash
