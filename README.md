@@ -37,7 +37,7 @@ To spin -up your learn environment, go to [`website`](./website/README.md#local-
 
 **You will need to fork this repo.**
 
-Once forked, execute `install.sh` (located in the root of this repo) script and fill te asked questions:
+Once forked, execute the `install.sh` (located in the root of this repo) script and fill te asked questions:
 
 ```bash
 bash ./install.sh 
