@@ -1,14 +1,16 @@
 :::info
-This workshop is performing upgrades from version `1.23`
+This workshop is performing upgrades from version `1.24`
 :::
 
-![Kubernetes version release](../../static/img/EKS-Upgrades-Workshop.png)
+![Kubernetes version release](../../static/img/ek-upgrades-workshop.png)
 
-:::note
-This workshop covers best practices that are applicable for both older and newer versions of Kubernetes. We are committed to keeping our content up-to-date with the latest Amazon EKS releases, Let's get started!
-:::
+
+# About the workshop
+
+The Amazon EKS cluster upgrades workshop is built to provide you with a reference architecture that can help make your Amazon EKS Cluster upgrades **less painful and more seamless**. To achieve this, we have used a `GitOps` strategy with `Fluxv2` for components reconciliation (all add-ons and apps are managed by flux), `Karpenter` for Node Scaling along with `AWS Fargate` for hosting the addons, and `Argo Workflows` to validate what has to be changed before running the upgrade.
+
 :::info
-**Workshop expected duration:** 4 hours
+**Workshop expected duration:** 1,5 hours
 :::
 
 

@@ -4,6 +4,9 @@ kind: HelmRelease
 metadata:
   name: metrics-server
   namespace: flux-system
+  labels:
+    self-managed-add-on: true
+    add-on-version: "3.8.4"
 spec:
   releaseName: metrics-server
   targetNamespace: kube-system

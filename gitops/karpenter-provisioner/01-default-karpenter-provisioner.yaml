@@ -49,9 +49,9 @@ metadata:
   name: default
 spec:
   subnetSelector:
-      alpha.eksctl.io/cluster-name: eks-upgrade-demo # Define the better tag for your subnet
+      karpenter.sh/discovery: eks-upgrades-workshop # Define the better tag for your subnet
   securityGroupSelector:
-      alpha.eksctl.io/cluster-name: eks-upgrade-demo # Define the better tag for your subnet
+      karpenter.sh/discovery: eks-upgrades-workshop # Define the better tag for your subnet
   tags:
     managed-by: "karpenter"
     intent: "apps"

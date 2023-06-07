@@ -1,8 +1,0 @@
-{
-  "label": "Validating State",
-  "position": 5,
-  "link": {
-    "type": "generated-index",
-    "description": "Checking for API backwards compatibility"
-  }
-}
