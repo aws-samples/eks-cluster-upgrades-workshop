@@ -1,4 +1,4 @@
-# EKS Cluster Upgrades ImmersionDay Module
+# EKS Cluster Upgrades Workshop
 
 ![Tests](https://github.com/aws-samples/eks-cluster-upgrades-workshop/actions/workflows/production.yaml/badge.svg?branch=main)
 
