@@ -86,7 +86,7 @@ spec:
       inputs:
         parameters:
           - name: k8s_version
-            value: "1.25"
+            value: "1.26"
       container:
         image: public.ecr.aws/i9m4f0j6/eks-validate-image:9
         command: ["/bin/sh","-c"]
@@ -151,6 +151,6 @@ spec:
   arguments:
     parameters:
       - name: k8s_version
-        value: "1.25"
+        value: "1.26"
       - name: VPC_ID
         value: "vpc-04a2856d6fddf5f4f"

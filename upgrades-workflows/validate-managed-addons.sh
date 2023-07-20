@@ -3,8 +3,8 @@
 # Set variables
 region=$1
 cluster_name=$2
-current_k8s_version=1.24
-target_k8s_version=1.25
+current_k8s_version=1.25
+target_k8s_version=1.26
 
 
 # Get current add-ons installed in the cluster
