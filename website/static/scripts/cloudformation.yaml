@@ -345,8 +345,8 @@ Resources:
             - export CLUSTER_NAME=eks-upgrades-workshop && echo 'export CLUSTER_NAME=eks-upgrades-workshop' >> /home/ec2-user/.bashrc
             - export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)" && echo "export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" >> /home/ec2-user/.bashrc
             - export AWS_REGION="$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f4)" && echo "export AWS_REGION=${AWS_REGION}" >> /home/ec2-user/.bashrc
-            - export K8S_CURRENT_VERSION=1.23 && echo "export K8S_CURRENT_VERSION=${K8S_CURRENT_VERSION}" >> /home/ec2-user/.bashrc
-            - export K8S_TARGET_VERSION=1.24 && echo "export K8S_TARGET_VERSION=${K8S_TARGET_VERSION}" >> /home/ec2-user/.bashrc
+            - export K8S_CURRENT_VERSION=1.25 && echo "export K8S_CURRENT_VERSION=${K8S_CURRENT_VERSION}" >> /home/ec2-user/.bashrc
+            - export K8S_TARGET_VERSION=1.26 && echo "export K8S_TARGET_VERSION=${K8S_TARGET_VERSION}" >> /home/ec2-user/.bashrc
             - echo 'aws cloud9 update-environment  --environment-id $C9_PID --managed-credentials-action DISABLE' >> /home/ec2-user/.bashrc
             - echo '====== Provision Terraform ======'
             - mkdir -p /home/ec2-user/environment/eks-blueprint
@@ -580,7 +580,7 @@ Resources:
 
                     vpc_cidr = "10.35.0.0/16"
                     azs      = slice(data.aws_availability_zones.available.names, 0, 3)
-                    cluster_version = "1.24"
+                    cluster_version = "1.25"
                     tags = {
                       Blueprint  = "eks-upgrades-workshop"
                       GithubRepo = "github.com/aws-ia/terraform-aws-eks-blueprints"

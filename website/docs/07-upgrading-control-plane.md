@@ -119,7 +119,7 @@ As you can see we are defining the variable `cluster_version=1.26` forcing terra
 
   # module.eks.aws_eks_addon.this["kube-proxy"] will be updated in-place
   ~ resource "aws_eks_addon" "this" {
-      ~ addon_version     = "v1.24.10-eksbuild.2" -> (known after apply)
+      ~ addon_version     = "1.25.6-eksbuild.1" -> (known after apply)
         id                = "eks-upgrades-workshop:kube-proxy"
         tags              = {
             "Blueprint"              = "eks-upgrades-workshop"
@@ -178,7 +178,7 @@ Output should look like this:
 
 ```bash
 NAME                          STATUS   ROLES    AGE   VERSION
-ip-192-168-6-9.ec2.internal   Ready    <none>   21h   v1.24.xx-eks-a59e1f0
+ip-192-168-6-12.ec2.internal   Ready    <none>   21h   v1.25.6-eks-48e63af
 ```
 
 Validate if all of our application pods are running in the same Node:
@@ -208,7 +208,7 @@ You should see an output similar to this:
 
 ```bash
 NAME                          STATUS                     ROLES    AGE   VERSION
-ip-192-168-6-9.ec2.internal   Ready,SchedulingDisabled   <none>   21h   v1.24.xx-eks-a59e1f0
+ip-192-168-6-9.ec2.internal   Ready,SchedulingDisabled   <none>   21h   v1.25.xx-eks-48e63af
 ```
 
 `STATUS` will be SchedulingDisabled, because `kubectl cordon` command have applied a taint into this node to make sure new pods are not schedule in it.
