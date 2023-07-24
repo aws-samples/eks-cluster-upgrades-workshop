@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - 01-sample-app.yaml
   - 01-pdb-sample-app.yaml
-  # - deprecated-manifests
+  - deprecated-manifests

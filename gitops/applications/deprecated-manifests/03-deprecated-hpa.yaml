@@ -1,13 +1,23 @@
----
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
+  creationTimestamp: null
   name: nginx-hpa
   namespace: default
 spec:
+  maxReplicas: 10
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 80
+        type: Utilization
+    type: Resource
+  minReplicas: 3
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: nginx
-  minReplicas: 3
-  maxReplicas: 10
+status:
+  currentMetrics: null
+  desiredReplicas: 0

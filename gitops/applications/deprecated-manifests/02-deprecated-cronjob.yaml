@@ -1,26 +1,43 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
+  creationTimestamp: null
   name: hello
   namespace: default
 spec:
-  schedule: "0 0 * * *"
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
   jobTemplate:
+    metadata:
+      creationTimestamp: null
     spec:
       template:
+        metadata:
+          creationTimestamp: null
         spec:
-          nodeSelector: # Force scale on Karpenter nodes
-            node-type: applications
-          tolerations: # Force scale on Karpenter nodes
-            - key: "applications"
-              operator: "Exists"
-              effect: "NoSchedule"
           containers:
-            - name: hello
-              image: busybox:1.28
-              imagePullPolicy: IfNotPresent
-              command:
-                - /bin/sh
-                - -c
-                - date; echo Hello from the Kubernetes cluster
+          - command:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster
+            image: busybox:1.28
+            imagePullPolicy: IfNotPresent
+            name: hello
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          nodeSelector:
+            node-type: applications
           restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          tolerations:
+          - effect: NoSchedule
+            key: applications
+            operator: Exists
+  schedule: 0 0 * * *
+  successfulJobsHistoryLimit: 3
+  suspend: false
+status: {}
