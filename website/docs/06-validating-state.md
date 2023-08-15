@@ -63,31 +63,25 @@ Open the report, it should look like the following:
 ========================== AWS BASICS VALIDATION ==========================
 Subnet Check: At least one subnet has more than 5 IPs available
 Role Check: Cluster role exists
-Security Group Check: Cluster security group exists
+Security Group Check: Cluster security group exists 
  ====================== Kubent Deprecated APIs report ======================
 __________________________________________________________________________________________
 >>> Deprecated APIs removed in 1.26 <<<
 ------------------------------------------------------------------------------------------
-KIND                                NAMESPACE     NAME                 API_VERSION            REPLACE_WITH (SINCE)
-PodSecurityPolicy                   <undefined>   eks.privileged       policy/v1beta1         <removed> (1.21.0)
-__________________________________________________________________________________________
->>> Deprecated APIs removed in 1.26 <<<
-------------------------------------------------------------------------------------------
 KIND                      NAMESPACE   NAME        API_VERSION           REPLACE_WITH (SINCE)
-HorizontalPodAutoscaler   default     nginx-hpa   autoscaling/v2beta1   autoscaling/v2 (1.23.0)
+HorizontalPodAutoscaler   default     nginx-hpa   autoscaling/v2beta2   autoscaling/v2 (1.23.0) 
  ====================== Self Managed Add-ons ======================
-NAME             AGE   READY   STATUS
-argo-workflows   38m   True    Release reconciliation succeeded
-karpenter        38m   True    Release reconciliation succeeded
-metrics-server   68m   True    Release reconciliation succeeded
+NAME             AGE    READY   STATUS
+argo-workflows   6m6s   True    Release reconciliation succeeded
+karpenter        6m6s   True    Release reconciliation succeeded
+metrics-server   51m    True    Release reconciliation succeeded
 ====================== Deprecated API in helm charts  ======================
-There were no resources found with known deprecated apiVersions.
-=========================== EKS Managed add-ons ===========================
-Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.1 to v1.19.0-eksbuild.2
-Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1
+There were no resources found with known deprecated apiVersions. 
+=========================== EKS Managed add-ons =========================== 
 ====================== Must look URLs ======================
 K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions=1.26.0
 EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.26
+
 ```
 
 As you can see, the only thing that we need to change is what `kube-no-trouble` have identified under `Deprecated APIs removed in 1.25` and `Deprecated APIs removed in 1.26`. We don't have any `self-managed add-on` using a deprecated API, and for the `managed add-ons` aws is managing them, so we will upgrade them when we upgrade our Control Plane using Terraform.
@@ -97,20 +91,11 @@ As you can see, the only thing that we need to change is what `kube-no-trouble` 
 The `Kubent Deprecated APIs report` have identified two manifests using depreacated API versions:
 
 ```
-KIND                NAMESPACE     NAME             API_VERSION      REPLACE_WITH (SINCE)
-CronJob             default       hello            batch/v1beta1    batch/v1 (1.21.0)
-
 KIND                      NAMESPACE   NAME        API_VERSION           REPLACE_WITH (SINCE)
 HorizontalPodAutoscaler   default     nginx-hpa   autoscaling/v2beta2   autoscaling/v2 (1.23.0)
 ```
 
-Let's update those using kubectl convert, those manifests are being reconciled by Flux, let's start by changing the `CronJob`:
-
-```bash
-kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/02-deprecated-cronjob.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/02-deprecated-cronjob.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/02-deprecated-cronjob.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/02-deprecated-cronjob.yaml
-```
-
-Let's do the same thing for the `HorizontalPodAutoscaler` manifest:
+Let's update those using kubectl convert, those manifests are being reconciled by Flux for the `HorizontalPodAutoscaler` manifest:
 
 ```bash
 kubectl convert -f /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.yaml > /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.bak && mv /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.bak /home/ec2-user/environment/eks-cluster-upgrades-workshop/gitops/applications/deprecated-manifests/03-deprecated-hpa.yaml
