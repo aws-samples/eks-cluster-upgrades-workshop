@@ -63,10 +63,10 @@ You should see the following output:
 
 ```output
 NAME                                                 STATUS   ROLES    AGE   VERSION
-fargate-ip-10-35-28-29.us-east-2.compute.internal    Ready    <none>   53m   v1.24.12-eks-f4dc2c0
-fargate-ip-10-35-37-154.us-east-2.compute.internal   Ready    <none>   53m   v1.24.12-eks-f4dc2c0
-fargate-ip-10-35-38-99.us-east-2.compute.internal    Ready    <none>   53m   v1.24.12-eks-f4dc2c0
-fargate-ip-10-35-45-57.us-east-2.compute.internal    Ready    <none>   53m   v1.24.12-eks-f4dc2c0
+fargate-ip-10-35-28-31.us-east-2.compute.internal    Ready    <none>   53m   v1.25.12-eks-51bfe41
+fargate-ip-10-35-37-141.us-east-2.compute.internal   Ready    <none>   53m   v1.25.12-eks-51bfe41
+fargate-ip-10-35-38-76.us-east-2.compute.internal    Ready    <none>   53m   v1.25.12-eks-51bfe41
+fargate-ip-10-35-45-68.us-east-2.compute.internal    Ready    <none>   53m   v1.25.12-eks-51bfe41
 ```
 
 <!-- For example, run the following command to get details about your EKS cluster: -->

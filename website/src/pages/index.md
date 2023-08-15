@@ -1,5 +1,5 @@
 :::info
-This workshop is performing upgrades from version `1.24`
+This workshop is performing upgrades from version `1.25`
 :::
 
 ![Kubernetes version release](../../static/img/ek-upgrades-workshop.png)

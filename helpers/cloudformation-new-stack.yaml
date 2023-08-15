@@ -580,7 +580,7 @@ Resources:
 
                     vpc_cidr = "10.35.0.0/16"
                     azs      = slice(data.aws_availability_zones.available.names, 0, 3)
-                    cluster_version = "1.24"
+                    cluster_version = "1.25"
                     tags = {
                       Blueprint  = "eks-upgrades-workshop"
                       GithubRepo = "github.com/aws-ia/terraform-aws-eks-blueprints"

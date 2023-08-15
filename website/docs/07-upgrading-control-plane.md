@@ -59,10 +59,10 @@ We have used terraform to spin-up our cluster, all the add-ons are managed via F
 ```bash
 cd /home/ec2-user/environment/eks-cluster-upgrades-workshop/terraform/clusters
 
-terraform plan -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25"
+terraform plan -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.26"
 ```
 
-As you can see we are defining the variable `cluster_version=1.25` forcing terraform to change the Control Plane to version `1.25`. Also since we are using EKS managed add-ons we can upgrade tham all together to the latest available version, see snippet below of the output of `terraform plan`:
+As you can see we are defining the variable `cluster_version=1.26` forcing terraform to change the Control Plane to version `1.26`. Also since we are using EKS managed add-ons we can upgrade tham all together to the latest available version, see snippet below of the output of `terraform plan`:
 
 
 ```json
@@ -70,7 +70,7 @@ As you can see we are defining the variable `cluster_version=1.25` forcing terra
     +/- resource "time_sleep" "this" {
       ~ id              = "2023-06-05T15:14:32Z" -> (known after apply)
       ~ triggers        = { # forces replacement
-          ~ "cluster_version"                    = "1.24" -> "1.25"
+          ~ "cluster_version"                    = "1.25" -> "1.26"
             # (3 unchanged elements hidden)
         }
         # (1 unchanged attribute hidden)
@@ -119,7 +119,7 @@ As you can see we are defining the variable `cluster_version=1.25` forcing terra
 
   # module.eks.aws_eks_addon.this["kube-proxy"] will be updated in-place
   ~ resource "aws_eks_addon" "this" {
-      ~ addon_version     = "v1.24.10-eksbuild.2" -> (known after apply)
+      ~ addon_version     = "1.25.6-eksbuild.1" -> (known after apply)
         id                = "eks-upgrades-workshop:kube-proxy"
         tags              = {
             "Blueprint"              = "eks-upgrades-workshop"
@@ -135,7 +135,7 @@ As you can see we are defining the variable `cluster_version=1.25` forcing terra
 As you can see, using terraform we are forcing all the `managed-add-ons` also to be upgraded to the latest available version, now let's apply the script.
 
 ```bash
-terraform apply --auto-approve -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.25"
+terraform apply --auto-approve -var="git_password=$GITHUB_TOKEN" -var="git_username=$GITHUB_USER" -var="git_url=https://github.com/$GITHUB_USER/eks-cluster-upgrades-workshop.git" -var="git_branch=$GIT_BRANCH" -var="aws_region=$AWS_REGION" -var="cluster_version=1.26"
 ```
 
 :::note
@@ -151,10 +151,14 @@ kubectl version | grep -i server
 The output should be similar to this:
 
 ```json
+<<<<<<< HEAD
 Server Version: version.Info{Major:"1", Minor:"25+", GitVersion:"v1.25.9-eks-0a21954", GitCommit:"xxxxx", GitTreeState:"clean", BuildDate:"2023-04-15T00:37:59Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+=======
+Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.0", GitCommit:"b3e6823", GitTreeState:"clean", BuildDate:"2023-06-22T15:04:41Z", GoVersion:"go1.16.3", Compiler:"gc", Platform:"linux/amd64"}
+>>>>>>> 8765013 (Set workshop to v1.26)
 ```
 
-As you can see, the Server Version is now `1.25`
+As you can see, the Server Version is now `1.26`
 
 ## Upgrading Nodes
 
@@ -174,7 +178,7 @@ Output should look like this:
 
 ```bash
 NAME                          STATUS   ROLES    AGE   VERSION
-ip-192-168-6-9.ec2.internal   Ready    <none>   21h   v1.24.xx-eks-a59e1f0
+ip-192-168-6-12.ec2.internal   Ready    <none>   21h   v1.25.6-eks-48e63af
 ```
 
 Validate if all of our application pods are running in the same Node:
@@ -204,7 +208,7 @@ You should see an output similar to this:
 
 ```bash
 NAME                          STATUS                     ROLES    AGE   VERSION
-ip-192-168-6-9.ec2.internal   Ready,SchedulingDisabled   <none>   21h   v1.24.xx-eks-a59e1f0
+ip-192-168-6-9.ec2.internal   Ready,SchedulingDisabled   <none>   21h   v1.25.xx-eks-48e63af
 ```
 
 `STATUS` will be SchedulingDisabled, because `kubectl cordon` command have applied a taint into this node to make sure new pods are not schedule in it.
@@ -303,10 +307,10 @@ You should see the following output:
 
 ```
 NAME                                         STATUS   ROLES    AGE   VERSION
-ip-10-35-10-230.us-east-2.compute.internal   Ready    <none>   69s   v1.25.xx-eks-0a21954
+ip-10-35-10-230.us-east-2.compute.internal   Ready    <none>   69s   v1.26.xx-eks-b3e6823
 ```
 
-As you can see, we have two nodes managed by Karpenter, one that is being drained with version `1.24` and a new one with version `1.25`, Karpenter notice those pods that were evicted before and create a new node to handle those pods, let's verify again:
+As you can see, we have two nodes managed by Karpenter, one that is being drained with version `1.25` and a new one with version `1.26`, Karpenter notice those pods that were evicted before and create a new node to handle those pods, let's verify again:
 
 ```bash
 kubectl get nodes -l node-type=applications

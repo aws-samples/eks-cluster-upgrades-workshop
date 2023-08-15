@@ -72,7 +72,7 @@ Your output should me similar to this:
 
 ```
 NAME                             STATUS   ROLES    AGE   VERSION
-ip-192-168-60-113.ec2.internal   Ready    <none>   21m   v1.24.xx-eks-a59e1f0
+ip-192-168-60-108.ec2.internal   Ready    <none>   21m   v1.25.6-eks-48e63af
 ```
 
 :::tip
