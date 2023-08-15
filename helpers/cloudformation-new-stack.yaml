@@ -723,7 +723,7 @@ Resources:
             - cd /home/ec2-user/environment/eks-blueprint && terraform apply --auto-approve
             - cp /home/ec2-user/environment/eks-blueprint/terraform.tfstate /home/ec2-user/environment/
             - chown ec2-user:ec2-user /home/ec2-user/environment/terraform.tfstate
-            - curl -o /home/ec2-user/environment/install.sh https://raw.githubusercontent.com/aws-samples/eks-cluster-upgrades-workshop/feat/workshop_v2/install.sh
+            - curl -o /home/ec2-user/environment/install.sh https://raw.githubusercontent.com/aws-samples/eks-cluster-upgrades-workshop/main/install.sh
             - chmod +x /home/ec2-user/environment/install.sh && chown ec2-user:ec2-user /home/ec2-user/environment/install.sh
             - aws eks --region $AWS_REGION update-kubeconfig --name eks-upgrades-workshop
             - mkdir -p /home/ec2-user/.kube && mv /root/.kube/config /home/ec2-user/.kube/ && chown -R ec2-user:ec2-user /home/ec2-user/.kube/config
