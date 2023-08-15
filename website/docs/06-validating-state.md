@@ -64,13 +64,13 @@ Open the report, it should look like the following:
 Subnet Check: At least one subnet has more than 5 IPs available
 Role Check: Cluster role exists
 Security Group Check: Cluster security group exists 
- ====================== Kubent Deprecated APIs report ======================
+====================== Kubent Deprecated APIs report ======================
 __________________________________________________________________________________________
 >>> Deprecated APIs removed in 1.26 <<<
 ------------------------------------------------------------------------------------------
 KIND                      NAMESPACE   NAME        API_VERSION           REPLACE_WITH (SINCE)
 HorizontalPodAutoscaler   default     nginx-hpa   autoscaling/v2beta2   autoscaling/v2 (1.23.0) 
- ====================== Self Managed Add-ons ======================
+====================== Self Managed Add-ons ======================
 NAME             AGE    READY   STATUS
 argo-workflows   6m6s   True    Release reconciliation succeeded
 karpenter        6m6s   True    Release reconciliation succeeded
@@ -88,7 +88,7 @@ As you can see, the only thing that we need to change is what `kube-no-trouble` 
 
 ## Using kubectl convert to change the manifests
 
-The `Kubent Deprecated APIs report` have identified two manifests using depreacated API versions:
+The `Kubent Deprecated APIs report` have identified the following manifests using depreacated API versions:
 
 ```
 KIND                      NAMESPACE   NAME        API_VERSION           REPLACE_WITH (SINCE)
@@ -139,19 +139,15 @@ Argo will create a new workflow. Now let's wait until this new workflow has fini
 ========================== AWS BASICS VALIDATION ==========================
 Subnet Check: At least one subnet has more than 5 IPs available
 Role Check: Cluster role exists
-Security Group Check: Cluster security group exists
- ====================== Kubent Deprecated APIs report ======================
-__________________________________________________________________________________________
->>> Deprecated APIs removed in 1.25 <<<
-------------------------------------------------------------------------------------------
-KIND                NAMESPACE     NAME             API_VERSION      REPLACE_WITH (SINCE)
-PodSecurityPolicy   <undefined>   eks.privileged   policy/v1beta1   <removed> (1.21.0)
- ====================== Self Managed Add-ons ======================
-NAME             AGE     READY   STATUS
-argo-workflows   178m    True    Release reconciliation succeeded
-karpenter        178m    True    Release reconciliation succeeded
-metrics-server   3h29m   True    Release reconciliation succeeded
+Security Group Check: Cluster security group exists 
+====================== Kubent Deprecated APIs report ====================== 
+====================== Self Managed Add-ons ======================
+NAME             AGE   READY   STATUS
+argo-workflows   34m   True    Release reconciliation succeeded
+karpenter        34m   True    Release reconciliation succeeded
+metrics-server   79m   True    Release reconciliation succeeded
 ====================== Deprecated API in helm charts  ======================
+<<<<<<< HEAD
 There were no resources found with known deprecated apiVersions.
  =========================== EKS Managed add-ons ===========================
 <<<<<<< HEAD
@@ -162,6 +158,11 @@ Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.2 to v1.19.0-eksbuild.2
 Need to upgrade kube-proxy from v1.25.9-eksbuild.1 to v1.26.2-minimal-eksbuild.1
 >>>>>>> 8765013 (Set workshop to v1.26)
  ====================== Must look URLs ======================
+=======
+There were no resources found with known deprecated apiVersions. 
+=========================== EKS Managed add-ons =========================== 
+====================== Must look URLs ======================
+>>>>>>> 3182b2c (Adjusted report)
 K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions=1.26.0
 EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.26
 ```
@@ -170,7 +171,4 @@ As you can see, we do not have any other deprecated API in use, so we can move o
 
 :::caution
 This pipeline is just for helping during the validation, it is strogly recommended to look into every add-on specific release notes to make sure that no add-on needs to be upgraded before upgrading EKS Control Plane.
-:::
-:::tip
-PodSecurityPolicy is managed by EKS. We don't need to do anything about it
 :::
