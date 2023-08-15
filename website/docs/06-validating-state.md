@@ -147,22 +147,9 @@ argo-workflows   34m   True    Release reconciliation succeeded
 karpenter        34m   True    Release reconciliation succeeded
 metrics-server   79m   True    Release reconciliation succeeded
 ====================== Deprecated API in helm charts  ======================
-<<<<<<< HEAD
-There were no resources found with known deprecated apiVersions.
- =========================== EKS Managed add-ons ===========================
-<<<<<<< HEAD
-Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.1 to v1.19.0-eksbuild.2
-Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1
-=======
-Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.2 to v1.19.0-eksbuild.2
-Need to upgrade kube-proxy from v1.25.9-eksbuild.1 to v1.26.2-minimal-eksbuild.1
->>>>>>> 8765013 (Set workshop to v1.26)
- ====================== Must look URLs ======================
-=======
 There were no resources found with known deprecated apiVersions. 
 =========================== EKS Managed add-ons =========================== 
 ====================== Must look URLs ======================
->>>>>>> 3182b2c (Adjusted report)
 K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions=1.26.0
 EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.26
 ```
