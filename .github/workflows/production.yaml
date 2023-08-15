@@ -23,8 +23,8 @@ jobs:
     - name: Build file
       run: npm run build
       working-directory: website
-      
-      
+
+
     - name: Deploy production to Netlify
       uses: South-Paw/action-netlify-deploy@v1.2.0
       with:

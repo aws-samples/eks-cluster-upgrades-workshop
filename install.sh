@@ -76,7 +76,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     read -p "Enter your git username: " git_username
     read -p "Enter your git branch (leave blank to set to main): " git_branch
 
-    # create an if to validate the branch and set main as default if not provided by user 
+    # create an if to validate the branch and set main as default if not provided by user
     if [[ -z $git_branch ]]; then
         git_branch="main"
         echo "Branch set to main."
@@ -110,7 +110,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
         cp "$tf_state_path" eks-cluster-upgrades-workshop/terraform/clusters/terraform.tfstate
         echo "Terraform state file copied to current directory."
     fi
-    
+
     cd eks-cluster-upgrades-workshop/terraform/clusters
 
     echo "Configuring Terraform"
@@ -123,7 +123,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     terraform apply -var="git_password=$git_password" -var="git_username=$git_username" -var="git_url=$git_url" -var="git_branch=$git_branch" -var="aws_region=$aws_region" --auto-approve
 
     sleep 5
-    # TODO: add aws_region on terraform apply command 
+    # TODO: add aws_region on terraform apply command
     terraform apply -var="git_password=$git_password" -var="git_username=$git_username" -var="git_url=$git_url" -var="git_branch=$git_branch" -var="aws_region=$aws_region" --auto-approve
 
     aws eks --region $aws_region update-kubeconfig --name eks-upgrades-workshop
@@ -131,7 +131,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     echo "Change needed variables on template for GitOps"
 
     # Retrieve Terraform outputs and set them as environment variables
-    
+
     ARGO_WORKFLOWS_BUCKET_ARN=$(terraform output -raw argo_workflows_bucket_arn)
     ARGO_WORKFLOWS_BUCKET_NAME=$(terraform output -raw argo_workflows_bucket_name)
     ARGO_WORKFLOWS_IRSA=$(terraform output -raw argo_workflows_irsa)
@@ -142,7 +142,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     CLUSTER_SECURITY_GROUP_ID=$(terraform output -raw cluster_primary_security_group_id)
     KARPENTER_INSTANCE_PROFILE=$(terraform output -raw karpenter_instance_profile)
     KARPENTER_IRSA=$(terraform output -raw karpenter_irsa)
-    
+
     pwd
     # Define the file paths
     karpenter_file="../../gitops/add-ons/02-karpenter.yaml"
@@ -157,7 +157,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     sed -i'' -e "s|KARPENTER_INSTANCE_PROFILE|$KARPENTER_INSTANCE_PROFILE|g" "$karpenter_file"
     sed -i'' -e "s|KARPENTER_IRSA|$KARPENTER_IRSA|g" "$karpenter_file"
     sed -i'' -e "s|AWS_REGION|$AWS_REGION|g" "$karpenter_file"
-    
+
     sed -i'' -e "s|ARGO_WORKFLOWS_BUCKET_ARN|$ARGO_WORKFLOWS_BUCKET_ARN|g" "$argo_workflows_file"
     sed -i'' -e "s|ARGO_WORKFLOWS_BUCKET_NAME|$ARGO_WORKFLOWS_BUCKET_NAME|g" "$argo_workflows_file"
     sed -i'' -e "s|ARGO_WORKFLOWS_IRSA|$ARGO_WORKFLOWS_IRSA|g" "$argo_workflows_file"
@@ -165,7 +165,7 @@ if [[ $fork_created == "yes" && $token_created == "yes" ]]; then
     sed -i'' -e "s|KARPENTER_INSTANCE_PROFILE|$KARPENTER_INSTANCE_PROFILE|g" "$argo_workflows_file"
     sed -i'' -e "s|KARPENTER_IRSA|$KARPENTER_IRSA|g" "$argo_workflows_file"
     sed -i'' -e "s|AWS_REGION|$AWS_REGION|g" "$argo_workflows_file"
-    
+
     sed -i'' -e "s|AWS_VPC_ID|$AWS_VPC_ID|g" "$upgrades_workflow_file"
     sed -i'' -e "s|REGION_AWS|$AWS_REGION|g" "$upgrades_workflow_file"
     sed -i'' -e "s|AWS_CLUSTER_IAM_ROLE_NAME|$CLUSTER_IAM_ROLE_NAME|g" "$upgrades_workflow_file"

@@ -49,7 +49,7 @@ Amazon EKS is committed to supporting at least four production-ready versions of
 
 The base architecture composed by `Amazon EKS Cluster`, `EKS Managed Add-ons`, and `Flux` is deployed with Terraform.
 
-`Flux` enables us to use a `mono repository` approach for deploying both `Self-Managed Add-Ons` and `Apps`. 
+`Flux` enables us to use a `mono repository` approach for deploying both `Self-Managed Add-Ons` and `Apps`.
 This approach makes the upgrade process much smoother because we have a single location to look at for deprecated API versions and ensure that add-ons are backwards compatible.
 
 ![EKS Architecture](../static/img/eks-upgrades-architecture.png)

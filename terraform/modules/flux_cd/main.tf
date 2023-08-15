@@ -71,7 +71,7 @@ resource "helm_release" "flux2" {
     name = "imageAutomationController.create"
     value = var.activate_image_automation_controller
   }
-  
+
   set {
     name = "imageAutomationController.serviceAccount.annotations"
     value = var.image_automation_controller_sa_annotations
@@ -101,6 +101,6 @@ resource "helm_release" "flux2" {
     name = "sourceController.create"
     value = var.activate_source_controller
   }
-  
+
   depends_on = [kubernetes_namespace.flux_system]
 }
