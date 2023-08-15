@@ -36,4 +36,3 @@ spec:
         defaultInstanceProfile: KARPENTER_INSTANCE_PROFILE # Replace
         # interruptionQueueName: eks-upgrade-demo
   install: {}
- 

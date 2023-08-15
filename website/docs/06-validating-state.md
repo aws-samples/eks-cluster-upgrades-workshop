@@ -63,7 +63,7 @@ Open the report, it should look like the following:
 ========================== AWS BASICS VALIDATION ==========================
 Subnet Check: At least one subnet has more than 5 IPs available
 Role Check: Cluster role exists
-Security Group Check: Cluster security group exists 
+Security Group Check: Cluster security group exists
  ====================== Kubent Deprecated APIs report ======================
 __________________________________________________________________________________________
 >>> Deprecated APIs removed in 1.25 <<<
@@ -75,17 +75,17 @@ ________________________________________________________________________________
 >>> Deprecated APIs removed in 1.26 <<<
 ------------------------------------------------------------------------------------------
 KIND                      NAMESPACE   NAME        API_VERSION           REPLACE_WITH (SINCE)
-HorizontalPodAutoscaler   default     nginx-hpa   autoscaling/v2beta1   autoscaling/v2 (1.23.0) 
+HorizontalPodAutoscaler   default     nginx-hpa   autoscaling/v2beta1   autoscaling/v2 (1.23.0)
  ====================== Self Managed Add-ons ======================
 NAME             AGE   READY   STATUS
 argo-workflows   38m   True    Release reconciliation succeeded
 karpenter        38m   True    Release reconciliation succeeded
 metrics-server   68m   True    Release reconciliation succeeded
 ====================== Deprecated API in helm charts  ======================
-There were no resources found with known deprecated apiVersions. 
+There were no resources found with known deprecated apiVersions.
 =========================== EKS Managed add-ons ===========================
 Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.1 to v1.19.0-eksbuild.2
-Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1 
+Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1
 ====================== Must look URLs ======================
 K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions=1.25.0
 EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.25
@@ -155,23 +155,23 @@ Argo will create a new workflow. Now let's wait until this new workflow has fini
 ========================== AWS BASICS VALIDATION ==========================
 Subnet Check: At least one subnet has more than 5 IPs available
 Role Check: Cluster role exists
-Security Group Check: Cluster security group exists 
+Security Group Check: Cluster security group exists
  ====================== Kubent Deprecated APIs report ======================
 __________________________________________________________________________________________
 >>> Deprecated APIs removed in 1.25 <<<
 ------------------------------------------------------------------------------------------
 KIND                NAMESPACE     NAME             API_VERSION      REPLACE_WITH (SINCE)
-PodSecurityPolicy   <undefined>   eks.privileged   policy/v1beta1   <removed> (1.21.0) 
+PodSecurityPolicy   <undefined>   eks.privileged   policy/v1beta1   <removed> (1.21.0)
  ====================== Self Managed Add-ons ======================
 NAME             AGE     READY   STATUS
 argo-workflows   178m    True    Release reconciliation succeeded
 karpenter        178m    True    Release reconciliation succeeded
 metrics-server   3h29m   True    Release reconciliation succeeded
 ====================== Deprecated API in helm charts  ======================
-There were no resources found with known deprecated apiVersions. 
+There were no resources found with known deprecated apiVersions.
  =========================== EKS Managed add-ons ===========================
 Need to upgrade aws-ebs-csi-driver from v1.19.0-eksbuild.1 to v1.19.0-eksbuild.2
-Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1 
+Need to upgrade kube-proxy from v1.24.10-eksbuild.2 to v1.25.9-eksbuild.1
  ====================== Must look URLs ======================
 K8s Rel notes: https://relnotes.k8s.io/?kinds=api-change&kinds=deprecation&releaseVersions=1.25.0
 EKS Notes: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-1.25

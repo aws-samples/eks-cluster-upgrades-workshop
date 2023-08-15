@@ -76,7 +76,7 @@ spec:
     server:
       serviceType: LoadBalancer
       serviceAccount:
-        annotations: 
+        annotations:
           eks.amazonaws.com/role-arn: ARGO_WORKFLOWS_IRSA
       extraArgs:
       - --auth-mode=server # This is for demonstration purposes only

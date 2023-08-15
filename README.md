@@ -40,7 +40,7 @@ To spin -up your learn environment, go to [`website`](./website/README.md#local-
 Once forked, execute the `install.sh` (located in the root of this repo) script and fill te asked questions:
 
 ```bash
-bash ./install.sh 
+bash ./install.sh
 ```
 
 > When asked for `tf_state_path` leave it empty to provision all the components
