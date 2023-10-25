@@ -4,8 +4,7 @@
 
 resource "aws_iam_role" "karpenter_node_role" {
   name = "KarpenterNodeRole-${var.name}"
-  assume_role_policy = <<EOF
-{
+  assume_role_policy = jsonencode({
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -16,8 +15,7 @@ resource "aws_iam_role" "karpenter_node_role" {
       "Action": "sts:AssumeRole"
     }
   ]
-}
-EOF
+})
 }
 
 resource "aws_iam_policy_attachment" "container_registry_policy" {
