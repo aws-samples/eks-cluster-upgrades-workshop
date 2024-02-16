@@ -1,12 +1,15 @@
 # EKS Cluster Upgrades Workshop
 
+
 ![Tests](https://github.com/aws-samples/eks-cluster-upgrades-workshop/actions/workflows/production.yaml/badge.svg?branch=main)
 
 :bangbang: THIS WORKSHOP IS PERFORMING UPGRADES FROM VERSION `1.25` :bangbang:
 
+:bangbang: THIS WORKSHOP IS BEING DEPRECATED, THE REPO WILL REMAIN FOR CONSULTING :bangbang:
+
 This workshop covers best practices that are applicable for both older and newer versions of Kubernetes. We are committed to keeping our content up-to-date with the latest Amazon EKS releases, Let's get started!
 
-[Click here to access the workshop](https://eks-upgrades-workshop.netlify.app/)
+[Click here to access the workshop](https://eks-upgrades-workshop-deprecated.netlify.app/) 
 
 ## Introduction
 
