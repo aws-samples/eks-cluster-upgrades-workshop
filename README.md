@@ -9,7 +9,7 @@
 
 This workshop covers best practices that are applicable for both older and newer versions of Kubernetes. We are committed to keeping our content up-to-date with the latest Amazon EKS releases, Let's get started!
 
-[Click here to access the workshop](https://eks-upgrades-workshop-deprecated.netlify.app/](https://eks-upgrades-workshop.netlify.app/)) 
+[Click here to access the workshop](https://eks-upgrades-workshop.netlify.app/)
 
 ## Introduction
 
